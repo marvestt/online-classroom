@@ -25,16 +25,6 @@ public class AnnouncementDao implements Dao<Announcement>{
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 	
-	private static final String DROP_TABLE_QUERY = "DROP TABLE announcements IF EXISTS CASCADE";
-	private static final String CREATE_TABLE_QUERY = "CREATE TABLE IF NOT EXISTS public.announcements(\r\n"
-														+ "	announcement_id SERIAL UNIQUE,\r\n"
-														+ "	class_id BIGINT NOT NULL, \r\n"
-														+ "	title VARCHAR(120) NOT NULL,\r\n"
-														+ "    text VARCHAR(120) NOT NULL,\r\n"
-														+ "    PRIMARY KEY(announcement_id),\r\n"
-														+ "    FOREIGN KEY(class_id) REFERENCES classes(class_id)\r\n"
-														+ ");";
-	
 	private static final String SELECT_BY_ASSIGNMENT_ID_QUERY = "SELECT * FROM announcements WHERE announcement_id=?";
 	private static final String SELECT_BY_CLASS_ID_QUERY = "SELECT * FROM announcements WHERE class_id=?";
 	private static final String SELECT_ALL_QUERY = "SELECT * FROM announcements";
