@@ -20,5 +20,4 @@ public class OnlineClassroomApplication{
 		SpringApplication.run(OnlineClassroomApplication.class, args);
 	}
 	
-
 }
