@@ -28,11 +28,11 @@ public class AnnouncementDao implements Dao<Announcement>{
 	private static final String SELECT_ALL_QUERY = "SELECT * FROM announcements";
 	
 	private static final String INSERT_QUERY = "INSERT INTO public.announcements (class_id, title, text) \r\n"
-												+ "	VALUES(?,?,?);";
+	                                            + "	VALUES(?,?,?);";
 	
 	private static final String UPDATE_QUERY = "UPDATE announcements\r\n"
-													+ "SET class_id = ?, title = ?, text = ? \r\n"
-													+ "WHERE announcement_id = ?;";
+	                                            + "SET class_id = ?, title = ?, text = ? \r\n"
+	                                            + "WHERE announcement_id = ?;";
 	
 	private static final String DELETE_QUERY = "DELETE FROM announcements WHERE announcement_id = ?;";
 	
