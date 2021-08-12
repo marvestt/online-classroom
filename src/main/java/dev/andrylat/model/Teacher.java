@@ -1,19 +1,16 @@
 package dev.andrylat.model;
 
-import java.util.List;
-
 public class Teacher extends User{
 
 	private long teacherId;
-	private String teacherDescription;
-	private List<Classroom> classesCreated;
-	
-	
-	public List<Classroom> getClassesCreated() {
-		return classesCreated;
+	private String description;
+	private String professionalName;
+
+	public String getProfessionalName() {
+		return professionalName;
 	}
-	public void setClassesCreated(List<Classroom> classesCreated) {
-		this.classesCreated = classesCreated;
+	public void setProfessionalName(String professionalName) {
+		this.professionalName = professionalName;
 	}
 	public long getTeacherId() {
 		return teacherId;
@@ -21,12 +18,11 @@ public class Teacher extends User{
 	public void setTeacherId(long teacherId) {
 		this.teacherId = teacherId;
 	}
-	public String getTeacherDescription() {
-		return teacherDescription;
+	public String getDescription() {
+		return description;
 	}
-	public void setTeacherDescription(String teacherDescription) {
-		this.teacherDescription = teacherDescription;
+	public void setDescription(String description) {
+		this.description = description;
 	}
-	
 	
 }

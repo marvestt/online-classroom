@@ -38,7 +38,6 @@ public class AnnouncementDao implements Dao<Announcement>{
 	
 	@Override
 	public Announcement get(long announcementId) {
-		// TODO Auto-generated method stub
 		return jdbcTemplate.queryForObject(SELECT_BY_ANNOUNCEMENT_ID_QUERY, new AnnouncementMapper(), announcementId);
 	}
 	

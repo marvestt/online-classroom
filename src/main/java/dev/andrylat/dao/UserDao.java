@@ -4,10 +4,12 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import dev.andrylat.dao.mappers.UserMapper;
 import dev.andrylat.model.User;
 
+@Repository
 public class UserDao implements Dao<User>{
 
 	@Autowired
