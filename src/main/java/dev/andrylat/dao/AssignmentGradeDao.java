@@ -22,11 +22,11 @@ public class AssignmentGradeDao implements Dao<AssignmentGrade>{
 	private static final String SELECT_ALL_QUERY = "SELECT * FROM assignment_grades";
 	
 	private static final String INSERT_QUERY = "INSERT INTO public.assignment_grades (assignment_id, student_id, grade) \r\n"
-												+ "	VALUES(?,?,?);";
+	                                            + "	VALUES(?,?,?);";
 	
 	private static final String UPDATE_QUERY = "UPDATE assignment_grades \r\n"
-												+ "SET assignment_id = ?, student_id = ?, grade = ? \r\n"
-												+ "WHERE assignment_grade_id = ?;";
+                                                + "SET assignment_id = ?, student_id = ?, grade = ? \r\n"
+                                                + "WHERE assignment_grade_id = ?;";
 	
 	private static final String DELETE_QUERY = "DELETE FROM assignment_grades WHERE assignment_grade_id = ?;";
 	

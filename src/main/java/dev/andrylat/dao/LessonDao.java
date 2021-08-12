@@ -21,11 +21,11 @@ public class LessonDao implements Dao<Lesson>{
 	private static final String SELECT_ALL_QUERY = "SELECT * FROM lessons";
 	
 	private static final String INSERT_QUERY = "INSERT INTO public.lessons (class_id, title, text) \r\n"
-												+ "	VALUES(?,?,?);";
+	                                            + "	VALUES(?,?,?);";
 	
 	private static final String UPDATE_QUERY = "UPDATE lessons \r\n"
-												+ "SET class_id = ?, title = ?, text = ? \r\n"
-												+ "WHERE lesson_id = ?;";
+                                                + "SET class_id = ?, title = ?, text = ? \r\n"
+                                                + "WHERE lesson_id = ?;";
 	
 	private static final String DELETE_QUERY = "DELETE FROM lessons WHERE lesson_id = ?;";
 	

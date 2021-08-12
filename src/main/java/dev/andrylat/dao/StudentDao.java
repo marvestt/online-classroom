@@ -19,21 +19,21 @@ public class StudentDao implements Dao<Student>{
 	UserDao userDao;
 	
 	private static final String SELECT_BY_STUDENT_ID_QUERY = "SELECT * FROM students INNER JOIN users \n"
-															+ "ON users.user_id = students.user_id \n"
-															+ "WHERE student_id=?";
+                                                            + "ON users.user_id = students.user_id \n"
+                                                            + "WHERE student_id=?";
 	private static final String SELECT_BY_USER_ID_QUERY = "SELECT * FROM students INNER JOIN users \n"
-															+ "ON users.user_id = students.user_id \n"
-															+ "WHERE user_id=?";
+                                                            + "ON users.user_id = students.user_id \n"
+                                                            + "WHERE user_id=?";
 	private static final String SELECT_ALL_QUERY = "SELECT * FROM students INNER JOIN users "
-													+ "ON users.user_id = students.user_id";
+                                                    + "ON users.user_id = students.user_id";
 	
 	private static final String INSERT_QUERY = "INSERT INTO public.students (user_id, goals, description)"
-												+ "	VALUES((SELECT user_id FROM users WHERE username=?),"
-												+ "?,?);";
+                                                + "	VALUES((SELECT user_id FROM users WHERE username=?),"
+                                                + "?,?);";
 	
 	private static final String UPDATE_QUERY = "UPDATE students \r\n"
-												+ "SET goals = ?, description = ? \n"
-												+ "WHERE student_id = ?;";
+                                                + "SET goals = ?, description = ? \n"
+                                                + "WHERE student_id = ?;";
 	
 	private static final String DELETE_QUERY = "DELETE FROM students WHERE student_id = ?;";
 	

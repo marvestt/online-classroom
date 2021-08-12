@@ -22,11 +22,11 @@ public class SubmissionDao implements Dao<Submission>{
 	private static final String SELECT_ALL_QUERY = "SELECT * FROM submissions";
 	
 	private static final String INSERT_QUERY = "INSERT INTO public.submissions (assignment_id, student_id, title, text) \r\n"
-												+ "	VALUES(?,?,?,?);";
+	                                            + "	VALUES(?,?,?,?);";
 	
 	private static final String UPDATE_QUERY = "UPDATE submissions \r\n"
-												+ "SET assignment_id = ?, student_id = ?, title = ?, text = ? \r\n"
-												+ "WHERE submission_id = ?;";
+                                                + "SET assignment_id = ?, student_id = ?, title = ?, text = ? \r\n"
+                                                + "WHERE submission_id = ?;";
 	
 	private static final String DELETE_QUERY = "DELETE FROM submissions WHERE submission_id = ?;";
 	

@@ -20,11 +20,11 @@ public class UserDao implements Dao<User>{
 	private static final String SELECT_ALL_QUERY = "SELECT * FROM users";
 	
 	private static final String INSERT_QUERY = "INSERT INTO public.users (username, password, first_name, surname) \r\n"
-												+ "	VALUES(?,?,?,?);";
+	                                            + "	VALUES(?,?,?,?);";
 	
 	private static final String UPDATE_QUERY = "UPDATE users \r\n"
-												+ "SET username = ?, password = ?, first_name = ?, surname = ? \r\n"
-												+ "WHERE user_id = ?;";
+                                                + "SET username = ?, password = ?, first_name = ?, surname = ? \r\n"
+                                                + "WHERE user_id = ?;";
 	
 	private static final String DELETE_QUERY = "DELETE FROM users WHERE user_id = ?;";
 	

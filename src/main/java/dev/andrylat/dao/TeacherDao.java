@@ -19,21 +19,21 @@ public class TeacherDao implements Dao<Teacher>{
 	UserDao userDao;
 	
 	private static final String SELECT_BY_TEACHER_ID_QUERY = "SELECT * FROM teachers INNER JOIN users \n"
-															+ "ON users.user_id = teachers.user_id \n"
-															+ "WHERE teacher_id=?";
+                                                            + "ON users.user_id = teachers.user_id \n"
+                                                            + "WHERE teacher_id=?";
 	private static final String SELECT_BY_USER_ID_QUERY = "SELECT * FROM teachers INNER JOIN users \n"
-															+ "ON users.user_id = teachers.user_id \n"
-															+ "WHERE user_id=?";
+                                                            + "ON users.user_id = teachers.user_id \n"
+                                                            + "WHERE user_id=?";
 	private static final String SELECT_ALL_QUERY = "SELECT * FROM teachers INNER JOIN users "
-													+ "ON users.user_id = teachers.user_id";
+	                                                + "ON users.user_id = teachers.user_id";
 	
 	private static final String INSERT_QUERY = "INSERT INTO public.teachers (user_id, professional_name, description)"
-												+ "	VALUES((SELECT user_id FROM users WHERE username=?),"
-												+ "?,?);";
+                                                + "	VALUES((SELECT user_id FROM users WHERE username=?),"
+                                                + "?,?);";
 	
 	private static final String UPDATE_QUERY = "UPDATE teachers \r\n"
-												+ "SET professional_name = ?, description = ? \n"
-												+ "WHERE teacher_id = ?;";
+                                                + "SET professional_name = ?, description = ? \n"
+                                                + "WHERE teacher_id = ?;";
 	
 	private static final String DELETE_QUERY = "DELETE FROM teachers WHERE teacher_id = ?;";
 	
