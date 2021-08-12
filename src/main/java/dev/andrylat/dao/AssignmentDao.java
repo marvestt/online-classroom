@@ -21,11 +21,11 @@ public class AssignmentDao implements Dao<Assignment>{
 	private static final String SELECT_ALL_QUERY = "SELECT * FROM assignments";
 	
 	private static final String INSERT_QUERY = "INSERT INTO public.assignments (class_id, title, description) \r\n"
-												+ "	VALUES(?,?,?);";
+	                                            + "	VALUES(?,?,?);";
 	
 	private static final String UPDATE_QUERY = "UPDATE assignments \r\n"
-													+ "SET class_id = ?, title = ?, description = ? \r\n"
-													+ "WHERE assignment_id = ?;";
+                                                + "SET class_id = ?, title = ?, description = ? \r\n"
+                                                + "WHERE assignment_id = ?;";
 	
 	private static final String DELETE_QUERY = "DELETE FROM assignments WHERE assignment_id = ?;";
 	
