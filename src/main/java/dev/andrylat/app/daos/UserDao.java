@@ -42,7 +42,7 @@ public class UserDao implements Dao<User>{
     @Override
     public Page<User> getAll(Pageable page) {
         List<User> users = jdbcTemplate.query(SELECT_ALL_QUERY + LIMIT + page.getPageSize() + OFFSET + page.getOffset(), 
-                new UserMapper());
+            new UserMapper());
         
         int totalNumberOfUsers = jdbcTemplate.queryForObject(TOTAL_COUNT_QUERY, Integer.class);
         

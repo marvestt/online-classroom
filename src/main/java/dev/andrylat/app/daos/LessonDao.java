@@ -42,7 +42,7 @@ public class LessonDao implements Dao<Lesson>{
     @Override
     public Page<Lesson> getAll(Pageable page) {
         List<Lesson> lessons = jdbcTemplate.query(SELECT_ALL_QUERY + LIMIT + page.getPageSize() + OFFSET + page.getOffset(), 
-                new LessonMapper());
+            new LessonMapper());
         
         int totalNumberOfLessons = jdbcTemplate.queryForObject(TOTAL_COUNT_QUERY, Integer.class);
         

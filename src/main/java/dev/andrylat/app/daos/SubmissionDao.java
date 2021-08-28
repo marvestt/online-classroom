@@ -43,7 +43,7 @@ public class SubmissionDao implements Dao<Submission>{
     @Override
     public Page<Submission> getAll(Pageable page) {
         List<Submission> submissions = jdbcTemplate.query(SELECT_ALL_QUERY + LIMIT + page.getPageSize() + OFFSET + page.getOffset(), 
-                new SubmissionMapper());
+            new SubmissionMapper());
         
         int totalNumberOfSubmissons = jdbcTemplate.queryForObject(TOTAL_COUNT_QUERY, Integer.class);
         

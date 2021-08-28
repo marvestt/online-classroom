@@ -43,7 +43,7 @@ public class AssignmentGradeDao implements Dao<AssignmentGrade>{
     @Override
     public Page<AssignmentGrade> getAll(Pageable page) {
         List<AssignmentGrade> assignmentGrades = jdbcTemplate.query(SELECT_ALL_QUERY + LIMIT + page.getPageSize() + OFFSET + page.getOffset(), 
-                new AssignmentGradeMapper());
+            new AssignmentGradeMapper());
         
         int totalNumberOfAssignmentGrades = jdbcTemplate.queryForObject(TOTAL_COUNT_QUERY, Integer.class);
         

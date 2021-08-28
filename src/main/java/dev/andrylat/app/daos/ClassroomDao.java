@@ -42,7 +42,7 @@ public class ClassroomDao implements Dao<Classroom>{
     @Override
     public Page<Classroom> getAll(Pageable page) {
         List<Classroom> classrooms = jdbcTemplate.query(SELECT_ALL_QUERY + LIMIT + page.getPageSize() + OFFSET + page.getOffset(), 
-                new ClassroomMapper());
+            new ClassroomMapper());
         
         int totalNumberOfClassrooms = jdbcTemplate.queryForObject(TOTAL_COUNT_QUERY, Integer.class);
         

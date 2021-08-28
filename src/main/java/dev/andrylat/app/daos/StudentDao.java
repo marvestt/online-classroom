@@ -54,7 +54,7 @@ public class StudentDao implements Dao<Student>{
     @Override
     public Page<Student> getAll(Pageable page) {
         List<Student> students = jdbcTemplate.query(SELECT_ALL_QUERY + LIMIT + page.getPageSize() + OFFSET + page.getOffset(), 
-                new StudentMapper());
+            new StudentMapper());
         
         int totalNumberOfStudents = jdbcTemplate.queryForObject(TOTAL_COUNT_QUERY, Integer.class);
         

@@ -50,7 +50,7 @@ public class AnnouncementDao implements Dao<Announcement>{
 	@Override
 	public Page<Announcement> getAll(Pageable page) {
 	    List<Announcement> announcements = jdbcTemplate.query(SELECT_ALL_QUERY + LIMIT + page.getPageSize() + OFFSET + page.getOffset(), 
-	            new AnnouncementMapper());
+            new AnnouncementMapper());
 	    
 	    int totalNumberOfAnnouncements = jdbcTemplate.queryForObject(TOTAL_COUNT_QUERY, Integer.class);
 	    
