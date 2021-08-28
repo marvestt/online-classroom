@@ -1,10 +1,22 @@
 package dev.andrylat.app.models;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
+
 public class AssignmentGrade {
 
+    @PositiveOrZero(message = "assignmentGradeId cannot be less than 0")
 	private long assignmentGradeId;
+    
+    @PositiveOrZero(message = "studentId cannot be less than 0")
 	private long studentId;
+    
+    @PositiveOrZero(message = "assignmentId cannot be less than 0")
 	private long assignmentId;
+    
+    @NotNull(message = "grade cannot be null")
+    @NotBlank(message = "grade cannot be blank")
 	private String grade;
 	
 	public long getAssignmentGradeId() {

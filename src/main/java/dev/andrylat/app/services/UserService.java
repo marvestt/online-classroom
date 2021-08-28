@@ -2,13 +2,22 @@ package dev.andrylat.app.services;
 
 import java.io.InvalidObjectException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import dev.andrylat.app.daos.UserDao;
 import dev.andrylat.app.exceptions.DatabaseOperationException;
+import dev.andrylat.app.models.Assignment;
+import dev.andrylat.app.models.Teacher;
 import dev.andrylat.app.models.User;
+import dev.andrylat.app.utilities.Utilities;
 
 public class UserService {
     
@@ -21,89 +30,84 @@ public class UserService {
     private static final String UPDATE_ERROR_MESSAGE = "";
     private static final String INVALID_OBJECT_ERROR_MESSAGE = "";
     private static final String NEW_LINE = "";
+
+    private static final String GET_USER_BY_USERNAME_ERROR_MESSAGE = null;
     
     private void validate(User user) throws InvalidObjectException {
-        /*
-         * ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-         * Validator validator = factory.getValidator();
-         * Set<ConstraintViolation<Announcement>> violations =
-         * validator.validate(announcement); StringBuilder violationMessages = new
-         * StringBuilder();
-         * 
-         * for(ConstraintViolation<Announcement> violation : violations) {
-         * violationMessages.append(violation.getMessage() + NEW_LINE); }
-         * if(!violations.isEmpty()) { throw new
-         * InvalidObjectException(violationMessages.toString() +
-         * INVALID_OBJECT_ERROR_MESSAGE + announcement.getAnnouncementId()); }
-         */
+        List<String> violations = Utilities.validate(user);
+        
+        if(!violations.isEmpty()) {
+            String violationMessages = violations
+                    .stream()
+                    .collect(Collectors.joining(NEW_LINE));
+            throw new InvalidObjectException(violationMessages + INVALID_OBJECT_ERROR_MESSAGE + user.getUserId());
+        }
     }
     
     public User get(long userId) throws DatabaseOperationException, InvalidObjectException{
-        /*
-         * Announcement announcement = new Announcement(); try { announcement =
-         * announcementDao.get(announcementId); } catch(DataAccessException e) { throw
-         * new DatabaseOperationException(ANNOUNCEMENT_ID_ERROR_MESSAGE); }
-         * 
-         * validate(announcement);
-         * 
-         * return announcement;
-         */
-        return null;
+        User user = new User();
+        try {
+            user = userDao.get(userId);
+        }
+        catch(DataAccessException e) {
+            throw new DatabaseOperationException(USER_ID_ERROR_MESSAGE);
+        }
+        validate(user);  
+        return user;
     }
     
-    public List<User> getUsersByClassId(long classId) throws DatabaseOperationException, InvalidObjectException{
-  
-        /*
-         * List<Announcement> announcements = Collections.EMPTY_LIST;
-         * 
-         * try { announcements = announcementDao.getAnnouncementsByClassId(classId); }
-         * catch(DataAccessException e) { throw new DatabaseOperationException
-         * (ANNOUNCEMENT_ID_ERROR_MESSAGE); } for(Announcement announcement :
-         * announcements) { validate(announcement); }
-         * 
-         * return announcements;
-         */
-        return null;
+    public User getUsersByUsername(String username) throws DatabaseOperationException, InvalidObjectException{
+        User user = new User();
+        try {
+            user = userDao.getUserByUsername(username);
+        }
+        catch(DataAccessException e) {
+            throw new DatabaseOperationException (GET_USER_BY_USERNAME_ERROR_MESSAGE);
+        }
+        validate(user);
+        return user;
     }
     
-    public Collection<User> getAll() throws DatabaseOperationException, InvalidObjectException {
-        /*
-         * Collection<Announcement> announcements = Collections.EMPTY_LIST;
-         * 
-         * try { announcements = announcementDao.getAll(); } catch(DataAccessException
-         * e) { throw new DatabaseOperationException(GET_ALL_ERROR_MESSAGE); }
-         * 
-         * for(Announcement announcement : announcements) { validate(announcement); }
-         * 
-         * return announcements;
-         */
-        return null;
+    public Page<User> getAll(Pageable page) throws DatabaseOperationException, InvalidObjectException {
+        Page<User> users = new PageImpl<>(Collections.EMPTY_LIST);
+        try {
+            users = userDao.getAll(page);
+        }
+        catch(DataAccessException e) {
+            throw new DatabaseOperationException(GET_ALL_ERROR_MESSAGE);
+        }
+        
+        for(User user : users) {
+            validate(user);
+        }
+        return users;
     }
     
     public int save(User user) throws InvalidObjectException, DatabaseOperationException {
-        /*
-         * int output = 0; validate(announcement); try { output =
-         * announcementDao.save(announcement); }catch(DataAccessException e) { throw new
-         * DatabaseOperationException(SAVE_ERROR_MESSAGE); }
-         * 
-         * return output;
-         */
-        return 0;
+        int output = 0;
+        validate(user);
+        try {
+            output = userDao.save(user);
+        }catch(DataAccessException e) {
+            throw new DatabaseOperationException(SAVE_ERROR_MESSAGE);
+        }
+        return output;
     }
     
     public void update(User user) throws InvalidObjectException, DatabaseOperationException{
-        /*
-         * validate(announcement); try { announcementDao.update(announcement);
-         * }catch(DataAccessException e) { throw new
-         * DatabaseOperationException(UPDATE_ERROR_MESSAGE +
-         * announcement.getAnnouncementId()); }
-         */
+        validate(user);
+        try {
+            userDao.update(user);
+        }catch(DataAccessException e) {
+            throw new DatabaseOperationException(UPDATE_ERROR_MESSAGE + user.getUserId());
+        }
     }
     
     public void delete(long userId) throws DatabaseOperationException{
-        /*
-         * try { announcementDao.delete(announcementId); }catch(DataAccessException e) {
-         * throw new DatabaseOperationException(ANNOUNCEMENT_ID_ERROR_MESSAGE); }
-         */
+        try {
+            userDao.delete(userId);
+        }catch(DataAccessException e) {
+            throw new DatabaseOperationException(USER_ID_ERROR_MESSAGE);
+        }
     }
 }

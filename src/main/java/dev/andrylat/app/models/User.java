@@ -1,11 +1,26 @@
 package dev.andrylat.app.models;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
+
 public class User {
 
+    @PositiveOrZero(message = "userId cannot be less than 0")
 	private long userId;
+    
+    @NotNull(message = "username cannot be null")
+    @NotBlank(message = "username cannot be blank")
 	private String username;
+    
+    @NotNull(message = "password cannot be null")
+    @NotBlank(message = "password cannot be blank")
 	private String password;
+    
+    @NotNull(message = "firstName cannot be null")
+    @NotBlank(message = "firstName cannot be blank")
 	private String firstName;
+    
 	private String surname;
 	
 	public long getUserId() {

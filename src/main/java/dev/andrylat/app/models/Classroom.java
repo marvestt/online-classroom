@@ -1,10 +1,21 @@
 package dev.andrylat.app.models;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
+
 public class Classroom {
 
+    @PositiveOrZero(message = "classId cannot be less than 0")
 	private long classId;
+    
+    @PositiveOrZero(message = "mainTeacherId cannot be less than 0")
 	private long mainTeacherId;
+    
+    @NotNull(message = "name cannot be null")
+    @NotBlank(message = "name cannot be blank")
 	private String name;
+    
 	private String description;
 
 

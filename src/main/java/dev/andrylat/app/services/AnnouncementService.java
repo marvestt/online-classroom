@@ -1,10 +1,11 @@
 package dev.andrylat.app.services;
 
-import java.io.InvalidObjectException;
+import java.io.InvalidObjectException; 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -13,11 +14,15 @@ import javax.validation.ValidatorFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import dev.andrylat.app.daos.AnnouncementDao;
 import dev.andrylat.app.exceptions.DatabaseOperationException;
 import dev.andrylat.app.models.Announcement;
+import dev.andrylat.app.utilities.Utilities;
 
 @Service
 public class AnnouncementService {
@@ -34,17 +39,14 @@ public class AnnouncementService {
                                                                 + "aren't empty for the announcement with annoucementId=";;
     private static final String NEW_LINE = "\n";
     
-    private void validate(Announcement announcement) throws InvalidObjectException {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        Set<ConstraintViolation<Announcement>> violations = validator.validate(announcement);
-        StringBuilder violationMessages = new StringBuilder();
+    private void validate(Announcement announcement) throws InvalidObjectException { 
+        List<String> violations = Utilities.validate(announcement);
         
-        for(ConstraintViolation<Announcement> violation : violations) {
-            violationMessages.append(violation.getMessage() + NEW_LINE);
-        }
         if(!violations.isEmpty()) {
-            throw new InvalidObjectException(violationMessages.toString() + INVALID_OBJECT_ERROR_MESSAGE + announcement.getAnnouncementId());
+            String violationMessages = violations
+                .stream()
+                .collect(Collectors.joining(NEW_LINE));
+            throw new InvalidObjectException(violationMessages + INVALID_OBJECT_ERROR_MESSAGE + announcement.getAnnouncementId());
         }
     }
     
@@ -79,11 +81,11 @@ public class AnnouncementService {
         return announcements;
     }
     
-    public Collection<Announcement> getAll() throws DatabaseOperationException, InvalidObjectException {
-        Collection<Announcement> announcements = Collections.EMPTY_LIST;
+    public Page<Announcement> getAll(Pageable page) throws DatabaseOperationException, InvalidObjectException {
+        Page<Announcement> announcements = new PageImpl<>(Collections.EMPTY_LIST);
         
         try {
-            announcements = announcementDao.getAll();
+            announcements = announcementDao.getAll(page);
         }
         catch(DataAccessException e) {
             throw new DatabaseOperationException(GET_ALL_ERROR_MESSAGE);

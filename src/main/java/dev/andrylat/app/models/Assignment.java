@@ -1,10 +1,21 @@
 package dev.andrylat.app.models;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
+
 public class Assignment {
 
+    @PositiveOrZero(message = "assignmentId cannot be less than 0")
 	private long assignmentId;
+    
+    @PositiveOrZero(message = "classId cannot be less than 0")
 	private long classId;
+	
+	@NotNull(message = "title cannot be null")
+	@NotBlank(message = "title cannot be blank")
 	private String title;
+	
 	private String description;
 
 	public String getTitle() {

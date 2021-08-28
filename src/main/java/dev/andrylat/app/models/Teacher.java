@@ -1,8 +1,13 @@
 package dev.andrylat.app.models;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
+
 public class Teacher extends User{
 
+    @PositiveOrZero(message = "teacherId cannot be less than 0")
 	private long teacherId;
+    
 	private String description;
 	private String professionalName;
 

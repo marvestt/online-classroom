@@ -1,5 +1,16 @@
 package dev.andrylat.app.utilities;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
+import dev.andrylat.app.models.AssignmentGrade;
+
 public class Utilities {
     
     public static String generateDatabaseIdErrorMessage(String idName) {
@@ -31,5 +42,18 @@ public class Utilities {
         String suffix = " object has an invalid state. Check field values to make sure they are valid where ";
         String postSuffix = "=";
         return entityName + suffix + idName + postSuffix;
+    }
+    
+    public static <T> List<String> validate (T objectToValidate){
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<T>> violations = validator.validate(objectToValidate);
+        List<String> violationMessages = new ArrayList<>();
+        
+        for(ConstraintViolation<T> violation : violations) {
+            violationMessages.add(violation.getMessage());
+        }
+        
+        return violationMessages;
     }
 }

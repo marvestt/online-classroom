@@ -1,7 +1,10 @@
 package dev.andrylat.app.models;
 
+import javax.validation.constraints.PositiveOrZero;
+
 public class Student extends User{
 	
+    @PositiveOrZero(message = "studentId cannot be less than 0")
 	private long studentId;
 	private String description;
 	private String goals;

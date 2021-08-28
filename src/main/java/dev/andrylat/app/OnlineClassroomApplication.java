@@ -9,12 +9,6 @@ import dev.andrylat.app.daos.AnnouncementDao;
 
 @SpringBootApplication
 public class OnlineClassroomApplication{
-
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
-	
-	@Autowired
-	private AnnouncementDao annoucementDao;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(OnlineClassroomApplication.class, args);
