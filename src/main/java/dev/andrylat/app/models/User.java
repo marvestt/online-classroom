@@ -62,10 +62,18 @@ public class User {
 	public void setSurname(String surname) {
 		this.surname = surname;
 	}
+	
+	public void setUserInfo(User user) {
+	    this.userId = user.userId;
+	    this.username = user.username;
+	    this.password = user.password;
+	    this.firstName = user.firstName;
+	    this.surname = user.surname;
+	}
 
 	@Override
 	public String toString() {
-		return String.format("Class[user_id=%d, username='%s', password='%s', first_name='%s', surname='%s']", 
+		return String.format("User[user_id=%d, username='%s', password='%s', first_name='%s', surname='%s']", 
 				userId, username, password, firstName, surname);
 	}
 }

@@ -1,15 +1,13 @@
 package dev.andrylat.app.utilities;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-
-import dev.andrylat.app.models.AssignmentGrade;
 
 public class Utilities {
     
@@ -48,12 +46,10 @@ public class Utilities {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<T>> violations = validator.validate(objectToValidate);
-        List<String> violationMessages = new ArrayList<>();
-        
-        for(ConstraintViolation<T> violation : violations) {
-            violationMessages.add(violation.getMessage());
-        }
-        
+        List<String> violationMessages = violations
+                                                .stream()
+                                                .map(e -> e.getMessage())
+                                                .collect(Collectors.toList());
         return violationMessages;
     }
 }

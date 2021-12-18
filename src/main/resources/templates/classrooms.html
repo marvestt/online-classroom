@@ -9,5 +9,37 @@
 	<div th:replace="fragments/navbar :: navbar">
 	</div>
 
+	<div class="col pt-2">
+	  <form id="outter-search-form" action="/search" method="post">
+	    <div class="row mt-5">
+	      <h1 class="mb-4 ml-3">Classroom Search</h1>
+	    </div>
+	
+	    <div id="search-form" class="row no-gutters">
+	      <div class="col-md-3">
+	        <div class="form-group">
+	          <input
+	            name="search-input"
+	            class="form-control mr-sm-1"
+	            type="text"
+	            placeholder="Search"
+	            aria-label="Search"
+	          />
+	        </div>
+	      </div>
+	      <div class="col ml-3">
+	        <button type="submit" class="btn btn-secondary" id="search-button">
+	          <img
+	            th:src="@{images/search_img.svg}"
+	            alt="search"
+	            style="width: 25px; height: 25px"
+	          />
+	        </button>
+	      </div>
+	    </div>
+	  </form>
+	</div>
+
+
 </body>
 </html>

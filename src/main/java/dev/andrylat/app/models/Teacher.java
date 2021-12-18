@@ -1,6 +1,5 @@
 package dev.andrylat.app.models;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
 public class Teacher extends User{
@@ -30,4 +29,9 @@ public class Teacher extends User{
 		this.description = description;
 	}
 	
+	@Override
+	public String toString() {
+	    return String.format("Teacher[teacher_id=%d, description=%s, professional_name=%s]", 
+                teacherId,description,professionalName);
+	}
 }

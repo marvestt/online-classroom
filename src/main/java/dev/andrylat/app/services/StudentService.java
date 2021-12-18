@@ -9,19 +9,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import dev.andrylat.app.daos.StudentDao;
 import dev.andrylat.app.exceptions.DatabaseOperationException;
 import dev.andrylat.app.models.Student;
 import dev.andrylat.app.utilities.Utilities;
 
+@Service
 public class StudentService {
 
     @Autowired
     private StudentDao studentDao;
+    
+    @Autowired
+    private UserService userService;
 
     private static final String STUDENT_ID_ERROR_MESSAGE = "";
     private static final String GET_ALL_ERROR_MESSAGE = "";
@@ -73,6 +79,30 @@ public class StudentService {
         }
         return student;
     }
+    
+    public Student getStudentByUsername(String username) {
+        try {
+            return studentDao.getStudentByUserId(userService.getByUsername(username).getUserId());
+        } catch (InvalidObjectException | DatabaseOperationException e) {
+            e.printStackTrace();
+        } 
+        return null;
+    }
+    
+    public boolean checkStudentExists(String username) {
+        try {
+            logger.debug("Attempting to retrieve the Student with username = " + username);
+            Student student = getStudentByUsername(username);
+            if(student != null) {
+                logger.debug("Student exists");
+                return true;
+            }
+        }catch(DatabaseOperationException | EmptyResultDataAccessException e) {
+            logger.debug("Student cannot be accessed. Student doens't exist");
+        }
+        
+        return false;
+    }
 
     public Page<Student> getAll(Pageable page) throws DatabaseOperationException, InvalidObjectException {
         Page<Student> students = new PageImpl<>(Collections.EMPTY_LIST);
@@ -96,11 +126,11 @@ public class StudentService {
         logger.debug("Attempting to save the following Student object to the database: " + student);
         validate(student);
         try {
-            logger.error(
-                    "Failed to save the Student. Check the database to make sure the students table is properly initialized");
             output = studentDao.save(student);
         } catch (DataAccessException e) {
-            throw new DatabaseOperationException(SAVE_ERROR_MESSAGE);
+            logger.error(
+                    "Failed to save the Student. Check the database to make sure the students table is properly initialized");
+            throw new DatabaseOperationException(SAVE_ERROR_MESSAGE + e.getMessage());
         }
         return output;
     }

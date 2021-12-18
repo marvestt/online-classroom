@@ -35,7 +35,7 @@ public class Student extends User{
 	
 	@Override
 	public String toString() {
-		return String.format("Class[student_id=%d, description=%d, goals=%d]", 
+		return String.format("Student[student_id=%d, description=%s, goals=%s]", 
 				studentId, description, goals);
 	}
 	

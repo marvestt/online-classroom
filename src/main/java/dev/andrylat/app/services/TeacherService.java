@@ -9,19 +9,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import dev.andrylat.app.daos.TeacherDao;
 import dev.andrylat.app.exceptions.DatabaseOperationException;
 import dev.andrylat.app.models.Teacher;
 import dev.andrylat.app.utilities.Utilities;
 
+@Service
 public class TeacherService {
 
     @Autowired
     private TeacherDao teacherDao;
+    
+    @Autowired
+    private UserService userService;
 
     private static final String TEACHER_ID_ERROR_MESSAGE = "";
     private static final String GET_ALL_ERROR_MESSAGE = "";
@@ -89,6 +95,30 @@ public class TeacherService {
         }
 
         return teachers;
+    }
+    
+    public Teacher getTeacherByUsername(String username) {
+        try {
+            return teacherDao.getTeacherByUserId(userService.getByUsername(username).getUserId());
+        } catch (InvalidObjectException | DatabaseOperationException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public boolean checkTeacherExists(String username) {
+        try {
+            logger.debug("Attempting to retrieve the Student with username = " + username);
+            Teacher teacher = getTeacherByUsername(username);
+            if(teacher != null) {
+                logger.debug("Teacher exists");
+                return true;
+            }
+        }catch(DatabaseOperationException | EmptyResultDataAccessException e) {
+            logger.debug("Teacher cannot be accessed. Teacher doens't exist");
+        }
+        
+        return false;
     }
 
     public int save(Teacher teacher) throws InvalidObjectException, DatabaseOperationException {

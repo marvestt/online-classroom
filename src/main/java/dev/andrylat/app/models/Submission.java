@@ -65,7 +65,7 @@ public class Submission {
 	
 	@Override
 	public String toString() {
-		return String.format("Class[submission_id=%d, assignment_id=%d, student_id=%d, title=%d, text=%d]", 
+		return String.format("Submission[submission_id=%d, assignment_id=%d, student_id=%d, title=%d, text=%d]", 
 				submissionId, assignmentId, studentId, title, text);
 	}
 	

@@ -33,6 +33,7 @@ public class UserDao implements Dao<User> {
     private static final String UPDATE_QUERY = "UPDATE users  "
             + "SET username = ?, password = ?, first_name = ?, surname = ?  " + "WHERE user_id = ?;";
 
+    private static final String SELECT_USER_PASSWORD = "SELECT password FROM users WHERE username=?";
     private static final String DELETE_QUERY = "DELETE FROM users WHERE user_id = ?;";
     
     private static final Logger logger = LoggerFactory.getLogger(UserDao.class);
@@ -52,6 +53,11 @@ public class UserDao implements Dao<User> {
     public User getUserByUsername(String username) {
         logger.debug("Running query to retrieve User object by the following username: " + username);
         return jdbcTemplate.queryForObject(SELECT_BY_USERNAME_QUERY, new UserMapper(), username);
+    }
+    
+    public String getUserPassword(String username) {
+        logger.debug("Running query to retrieve user password with username: " + username);
+        return jdbcTemplate.queryForObject(SELECT_USER_PASSWORD, String.class,username);
     }
 
     @Override

@@ -26,7 +26,7 @@ public class StudentDao implements Dao<Student> {
     private static final String SELECT_BY_STUDENT_ID_QUERY = "SELECT * FROM students INNER JOIN users "
             + "ON users.user_id = students.user_id " + "WHERE student_id=?";
     private static final String SELECT_BY_USER_ID_QUERY = "SELECT * FROM students INNER JOIN users "
-            + "ON users.user_id = students.user_id " + "WHERE user_id=?";
+            + "ON users.user_id = students.user_id " + "WHERE students.user_id=?";
     private static final String SELECT_ALL_QUERY = "SELECT * FROM students INNER JOIN users "
             + "ON users.user_id = students.user_id";
     private static final String LIMIT = " LIMIT ";
@@ -34,7 +34,7 @@ public class StudentDao implements Dao<Student> {
     private static final String TOTAL_COUNT_QUERY = "SELECT COUNT(*) FROM students";
 
     private static final String INSERT_QUERY = "INSERT INTO public.students (user_id, goals, description)"
-            + "	VALUES((SELECT user_id FROM users WHERE username=?)," + "?,?);";
+            + "	VALUES((SELECT user_id FROM users WHERE username=? LIMIT 1)," + "?,?);";
 
     private static final String UPDATE_QUERY = "UPDATE students " + "SET goals = ?, description = ? "
             + "WHERE student_id = ?;";

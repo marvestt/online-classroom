@@ -12,12 +12,14 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import dev.andrylat.app.daos.LessonDao;
 import dev.andrylat.app.exceptions.DatabaseOperationException;
 import dev.andrylat.app.models.Lesson;
 import dev.andrylat.app.utilities.Utilities;
 
+@Service
 public class LessonService {
 
     @Autowired

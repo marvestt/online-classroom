@@ -30,7 +30,7 @@ public class TeacherDao implements Dao<Teacher>{
 	private static final String SELECT_BY_USER_ID_QUERY = 
         "SELECT * FROM teachers INNER JOIN users "
         + "ON users.user_id = teachers.user_id "
-        + "WHERE user_id=?";
+        + "WHERE teachers.user_id=?";
 	private static final String SELECT_ALL_QUERY = 
         "SELECT * FROM teachers INNER JOIN users "
         + "ON users.user_id = teachers.user_id";

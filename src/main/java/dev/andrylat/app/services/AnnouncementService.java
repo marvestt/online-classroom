@@ -31,7 +31,7 @@ public class AnnouncementService {
     private static final String UPDATE_ERROR_MESSAGE = "Something went wrong when trying to update the announcement object. Please check the database"
             + "for the announcement with annoucementId=";
     private static final String INVALID_OBJECT_ERROR_MESSAGE = "Announcement object has an invalid state. Check title/text values to make sure they "
-            + "aren't empty for the announcement with annoucementId=";;
+            + "aren't empty for the announcement with annoucementId=";
     private static final String NEW_LINE = "\n";
     private static final String NULL_ANNOUNCEMENT = "Announcement is not allowed to be null. Please check the object and make sure a value is assigned correctly";
 
