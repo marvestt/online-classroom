@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Login</title>
+	<head th:insert="fragments/header :: header">
+</head>
+<body>
+<div class="container-fluid text-center">
+    <div>
+        <img class="img-fluid" th:src="@{images/notebook-icon.jpg}" width="200" height="200" />
+    </div>
+
+    <form th:action="@{/initiate-signup}" th:object="${userOption}" method="post" style="max-width: 350px; margin: 0 auto;">
+         
+        <div class="border border-secondary p-3 rounded">
+            <p>Sign Up</p>
+            <p>
+                <input type="text" th:value="${user.username}" name="username" class="form-control" placeholder="Username" required autofocus/>
+            </p>
+            <p>
+                <input type="password" th:value="${user.password}" name="password"  class="form-control" placeholder="Password" required />
+            </p>
+            <p>
+                <input type="text" th:value="${user.firstName}" name="firstName"  class="form-control" placeholder="First Name" required/>
+            </p>
+            <p>
+                <input type="text" th:value="${user.surname}" name="surname"  class="form-control" placeholder="Last Name" required />
+            </p>
+            <div id="studentDiv" class="extraFields">
+	            <p>
+	                <input type="text" th:value="${student.description}" name="description"  class="form-control" placeholder="Describe Yourself"  />
+	            </p>
+	         	<p>
+	                <input type="text" th:value="${student.goals}" name="goals"  class="form-control" placeholder="Goals"  />
+	            </p>
+            </div>
+            
+            <div id="teacherDiv" class="extraFields" style ="display: none;">
+	              <p>
+	                  <input type="text" th:value="${teacher.description}" name="teacher.description"  class="form-control" placeholder="Describe Yourself"  />
+	              </p>
+	             <p>
+               		 <input type="text" th:value="${teacher.professionalName}" name="professionalName"  class="form-control" placeholder="Professional Name" />
+            	</p>
+            </div>
+         	
+			<div th:each="currentUserType : ${T(dev.andrylat.app.models.UserType).values()}">
+				
+				<div class="custom-control">
+					<input type="radio" th:field="*{userType}" th:value="${currentUserType}"  name="studentTeacherRadioButton">
+					<label th:text="${#strings.capitalize(#strings.toLowerCase(currentUserType))}"></label>
+				</div>
+			</div>
+
+            <p>
+            	<button type="submit" class="btn btn-primary mr-4 mt-3" >Sign Up</button>
+     	      
+               	<a href="/" class="btn btn-secondary mt-3">Back</a>
+            </p>
+        </div>
+    </form>  
+    <div >
+    	<div th:if="${validationMessages != null} and ${not #lists.isEmpty(validationMessages)}" class="modal" id="error-modal" tabindex="1" role="dialog">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title">Error</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		      
+		      <ul>
+		      	<li th:each = "validationMessage : ${validationMessages}" th:text="${validationMessage}"> Error Occurred</li>
+		      </ul>
+		        <p></p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+    </div>
+    
+    <footer>
+    <script language="JavaScript" type="application/javascript" th:src="@{js/signup.min.js}"></script>
+
+    </footer>    
+</div>
+</body>
+</html>
