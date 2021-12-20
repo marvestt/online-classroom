@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
@@ -58,6 +59,10 @@
             	<button type="submit" class="btn btn-primary mr-4 mt-3" >Sign Up</button>
      	      
                	<a href="/" class="btn btn-secondary mt-3">Back</a>
+               	
+               	<div th:if="${validationMessages != null} and ${not #lists.isEmpty(validationMessages)}" >
+               		<button class = "btn btn-primary mr-4 mt-3"> Whatever </button>
+               	</div>
             </p>
         </div>
     </form>  

@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import dev.andrylat.app.models.Student;
 import dev.andrylat.app.models.Teacher;
@@ -37,33 +38,38 @@ public class LogInController {
     
     
     @GetMapping(value = "/home")
-    public String viewHopePage(Model model) {
+    public String viewHopePage(Model model, @ModelAttribute("student") Student student,
+                                @ModelAttribute("teacher") Teacher teacher) {
+        if(student.getUsername() == null && teacher.getUsername() == null) {
+            return "redirect:/";
+        }
         return "home";
     }
     
     @PostMapping(value = "/login")
-    public String attemptLogin(@ModelAttribute("user") User user, Model model) {
+    public String attemptLogin(@ModelAttribute("user") User user, Model model,
+                                RedirectAttributes attributes) {
         List<String> validationMessages = userLogInService.validateUser(user);
         
         if(!validationMessages.isEmpty()) {
-            model.addAttribute("validationMessages", validationMessages);
-            return "login";
+            attributes.addFlashAttribute("validationMessages",validationMessages);
+            return "redirect:/";
         }
         
         String username = user.getUsername();
         
         if(studentService.checkStudentExists(username)) {
             Student student = studentService.getStudentByUsername(username);
-            model.addAttribute("student",student);
-            return "home";
+            attributes.addFlashAttribute("student",student);
+            return "redirect:/home";
         }
         else if(teacherService.checkTeacherExists(username)) {
             Teacher teacher = teacherService.getTeacherByUsername(username);
-            model.addAttribute("teacher", teacher);
-            return "home";
+            attributes.addFlashAttribute("teacher",teacher);
+            return "redirect:/home";
         }
         
-        return "home";
+        return "redirect:/";
     }
     
 

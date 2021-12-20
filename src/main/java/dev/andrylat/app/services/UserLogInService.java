@@ -20,10 +20,8 @@ public class UserLogInService {
     
     public List<String> validateUser(User user){
         List<String> validationMessages = new ArrayList<>();
-        String username = user.getUsername();
-        String firstName = user.getFirstName();
-        String surname = user.getSurname();
-        String password = user.getPassword();
+        String username = user.getUsername().trim();
+        String password = user.getPassword().trim();
         
         if(username == null || username.isBlank()) {
             validationMessages.add(EMPTY_USERNAME);

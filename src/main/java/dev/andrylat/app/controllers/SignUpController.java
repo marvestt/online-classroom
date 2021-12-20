@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import dev.andrylat.app.exceptions.DatabaseOperationException;
 import dev.andrylat.app.models.Student;
@@ -51,15 +53,16 @@ public class SignUpController {
     }
     
     @PostMapping(value = "/initiate-signup")
-    public String attemptSignUp(@ModelAttribute("user") User user,
+    public RedirectView attemptSignUp(@ModelAttribute("user") User user,
             @ModelAttribute("student") Student student, @ModelAttribute("teacher") Teacher teacher,
-            @ModelAttribute("userOption") UserOption userOption, Model model) {
+            @ModelAttribute("userOption") UserOption userOption, RedirectAttributes attributes) {
         
         List<String> validationMessages = userRegistrationService.validateUser(user);
         
         if(!validationMessages.isEmpty()) {
-            model.addAttribute("validationMessages",validationMessages);
-            return "signup";
+            RedirectView view = new RedirectView("/signup", true);
+            attributes.addFlashAttribute("validationMessages",validationMessages);
+            return view;
         }
         
         userService.encryptUserPassword(user);
@@ -68,12 +71,12 @@ public class SignUpController {
             if(userOption.getUserType() == UserType.STUDENT) {
                 student.setUserInfo(user);
                 studentService.save(student);
-                return "home";
+                return new RedirectView("home");
             }
             else if(userOption.getUserType() == UserType.TEACHER){
                 teacher.setUserInfo(user);
                 teacherService.save(teacher);
-                return "home";
+                return new RedirectView("home");
             }
         }
         catch (InvalidObjectException e) {
@@ -83,6 +86,6 @@ public class SignUpController {
             e.printStackTrace();
         }
         
-        return "signup";
+        return new RedirectView("signup");
     }
 }
