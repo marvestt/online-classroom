@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
 import dev.andrylat.app.exceptions.DatabaseOperationException;
 import dev.andrylat.app.models.Student;
@@ -53,16 +52,15 @@ public class SignUpController {
     }
     
     @PostMapping(value = "/initiate-signup")
-    public RedirectView attemptSignUp(@ModelAttribute("user") User user,
+    public String attemptSignUp(@ModelAttribute("user") User user,
             @ModelAttribute("student") Student student, @ModelAttribute("teacher") Teacher teacher,
             @ModelAttribute("userOption") UserOption userOption, RedirectAttributes attributes) {
         
         List<String> validationMessages = userRegistrationService.validateUser(user);
         
         if(!validationMessages.isEmpty()) {
-            RedirectView view = new RedirectView("/signup", true);
             attributes.addFlashAttribute("validationMessages",validationMessages);
-            return view;
+            return "redirect:/signup";
         }
         
         userService.encryptUserPassword(user);
@@ -71,12 +69,12 @@ public class SignUpController {
             if(userOption.getUserType() == UserType.STUDENT) {
                 student.setUserInfo(user);
                 studentService.save(student);
-                return new RedirectView("home");
+                return "redirect:/home";
             }
             else if(userOption.getUserType() == UserType.TEACHER){
                 teacher.setUserInfo(user);
                 teacherService.save(teacher);
-                return new RedirectView("home");
+                return "redirect:/home";
             }
         }
         catch (InvalidObjectException e) {
@@ -86,6 +84,6 @@ public class SignUpController {
             e.printStackTrace();
         }
         
-        return new RedirectView("signup");
+        return "redirect:/signup";
     }
 }
