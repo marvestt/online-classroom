@@ -18,8 +18,8 @@ public class AnnouncementMapper implements RowMapper<Announcement> {
         Announcement announcement = new Announcement();
         announcement.setAnnouncementId(rs.getLong(ANNOUNCEMENT_ID_LABEL));
         announcement.setClassId(rs.getLong(CLASS_ID_LABEL));
-        announcement.setText(rs.getString(TITLE_LABEL));
-        announcement.setTitle(rs.getString(TEXT_LABEL));
+        announcement.setTitle(rs.getString(TITLE_LABEL));
+        announcement.setText(rs.getString(TEXT_LABEL));
         return announcement;
     }
 

@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import dev.andrylat.app.daos.ClassMembersDao;
 import dev.andrylat.app.daos.ClassroomDao;
 import dev.andrylat.app.exceptions.DatabaseOperationException;
 import dev.andrylat.app.models.Classroom;
@@ -24,6 +25,9 @@ public class ClassroomService {
 
     @Autowired
     private ClassroomDao classroomDao;
+    
+    @Autowired
+    private ClassMembersDao classMembersDao;
 
     private static final String CLASS_ID_ERROR_MESSAGE = "";
     private static final String GET_ALL_ERROR_MESSAGE = "";
@@ -82,6 +86,47 @@ public class ClassroomService {
         }
         return classrooms;
     }
+    
+    public List<Classroom> getClassroomsByUserId(Long userId) throws DatabaseOperationException{
+        logger.debug("Attempting to retrieve class ids for user");
+        List<Classroom> classrooms = Collections.EMPTY_LIST;
+        try {
+           classrooms = classMembersDao.getClassroomIdsByUserId(userId)
+                                       .stream()
+                                       .map(e -> {try{return get(e);} catch(InvalidObjectException ex) {return null;}})
+                                       .filter(e -> e != null)
+                                       .collect(Collectors.toList());
+        }
+        catch(DataAccessException e) {
+            logger.error("An error occured when attempting to access the class_members table. Please check the sql tables");
+            throw new DatabaseOperationException(e.toString());
+        }
+        return classrooms;
+    }
+    
+    public List<Classroom> searchClassrooms(String searchText) throws DatabaseOperationException{
+        logger.debug("Attempting to retrieve classroom objects that match the search text");
+        List<Classroom> classrooms = Collections.EMPTY_LIST;
+        try {
+           classrooms  = classroomDao.searchClassrooms(searchText);
+        }
+        catch(DataAccessException e) {
+            logger.error("An error occured when attempting to access the classes table. Please check the sql tables");
+            throw new DatabaseOperationException(e.toString());
+        }
+        return classrooms;
+    }
+    
+    public void registerUserInClassroom(long userId, long classId) throws DatabaseOperationException{
+        logger.debug("Attempting to register user into class");
+        try {
+            classMembersDao.addUserToClassroom(userId, classId);
+        }
+        catch(DataAccessException e) {
+            logger.error("An error occured when trying to register user into the class. Please check the class_members table in the database");
+            throw new DatabaseOperationException(e.toString());
+        }
+    }
 
     public Page<Classroom> getAll(Pageable page) throws DatabaseOperationException, InvalidObjectException {
         Page<Classroom> classrooms = new PageImpl<>(Collections.EMPTY_LIST);
@@ -99,36 +144,41 @@ public class ClassroomService {
         return classrooms;
     }
 
-    public int save(Classroom classroom) throws InvalidObjectException, DatabaseOperationException {
+    public int save(Classroom classroom) {
         logger.debug("Attempting to update the following Classroom object in the database: " + classroom);
         int output = 0;
-        validate(classroom);
+        
         try {
+            validate(classroom);
             output = classroomDao.save(classroom);
-        } catch (DataAccessException e) {
+        } catch (DatabaseOperationException e) {
             logger.error(
                     "Failed to save the Classroom. Check the database to make sure the classes table is properly initialized");
             throw new DatabaseOperationException(SAVE_ERROR_MESSAGE);
         }
+        catch(InvalidObjectException e) {
+            logger.error("Classroom object seems to be in an invalid state. Please verify the classroom object\n" + e );
+        }
         return output;
     }
 
-    public void update(Classroom classroom) throws InvalidObjectException, DatabaseOperationException {
+    public void update(Classroom classroom)  {
         logger.debug("Attempting to update the following Classroom object in the database: " + classroom);
-        validate(classroom);
+        
         try {
+            validate(classroom);
             classroomDao.update(classroom);
-        } catch (DataAccessException e) {
+        } catch (DataAccessException | InvalidObjectException | DatabaseOperationException e) {
             logger.error("Failed to perform update. Check the Classroom object and classes table in the database");
             throw new DatabaseOperationException(UPDATE_ERROR_MESSAGE + classroom.getClassId());
         }
     }
 
-    public void delete(long classId) throws DatabaseOperationException {
+    public void delete(long classId) {
         logger.debug("Attempting to delete Classroom with classId = " + classId);
         try {
             classroomDao.delete(classId);
-        } catch (DataAccessException e) {
+        } catch (DataAccessException | DatabaseOperationException e) {
             logger.error(
                     "Classroom deletion failed. Check the classes table in the database and make sure the correct class_id is used");
             throw new DatabaseOperationException(CLASS_ID_ERROR_MESSAGE);

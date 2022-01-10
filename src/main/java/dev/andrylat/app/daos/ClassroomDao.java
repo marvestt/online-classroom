@@ -28,11 +28,17 @@ public class ClassroomDao implements Dao<Classroom> {
     private static final String TOTAL_COUNT_QUERY = "SELECT COUNT(*) FROM classes";
 
     private static final String INSERT_QUERY = "INSERT INTO public.classes (main_teacher_id, name, description)  "
-            + "	VALUES(?,?,?);";
+            + "	VALUES(?,?,?) RETURNING class_id;";
 
     private static final String UPDATE_QUERY = "UPDATE classes  "
             + "SET main_teacher_id = ?, name = ?, description = ?  " + "WHERE class_id = ?;";
 
+    private static final String SEARCH_QUERY = "SELECT class_id,main_teacher_id,classes.name,classes.description,teachers.professional_name "
+            + "FROM public.classes JOIN public.teachers on classes.main_teacher_id=teachers.teacher_id "
+            + "WHERE to_tsvector(classes.name) @@ plainto_tsquery(?) "
+            + "OR to_tsvector(classes.description) @@ plainto_tsquery(?) "
+            + "OR to_tsvector(teachers.professional_name) @@ plainto_tsquery(?)";
+    
     private static final String DELETE_QUERY = "DELETE FROM classes WHERE class_id = ?;";
     
     private static final Logger logger = LoggerFactory.getLogger(ClassroomDao.class);
@@ -52,11 +58,15 @@ public class ClassroomDao implements Dao<Classroom> {
     public List<Classroom> getClassesByMainTeacherId(long mainTeacherId) {
         return jdbcTemplate.query(SELECT_BY_MAIN_TEACHER_ID_QUERY, new ClassroomMapper(), mainTeacherId);
     }
+    
+    public List<Classroom> searchClassrooms(String searchText){
+        return jdbcTemplate.query(SEARCH_QUERY, new ClassroomMapper(), searchText,searchText,searchText);
+    }
 
     @Override
     public int save(Classroom classroom) {
         logger.debug("Running query to save the following Classroom object into the database: " + classroom);
-        return jdbcTemplate.update(INSERT_QUERY, classroom.getMainTeacherId(), classroom.getName(),
+        return jdbcTemplate.queryForObject(INSERT_QUERY, Integer.class, classroom.getMainTeacherId(), classroom.getName(),
                 classroom.getDescription());
     }
 

@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import dev.andrylat.app.daos.ClassMembersDao;
 import dev.andrylat.app.daos.UserDao;
 import dev.andrylat.app.exceptions.DatabaseOperationException;
 import dev.andrylat.app.models.User;
@@ -27,6 +28,9 @@ public class UserService {
 
     @Autowired
     private UserDao userDao;
+    
+    @Autowired
+    private ClassMembersDao classMembersDao;
 
     private static final String USER_ID_ERROR_MESSAGE = "The user_id provided doesn't match any columns in the database. Please verify the value and try again";;
     private static final String GET_ALL_ERROR_MESSAGE = "Something went wrong when trying to retrieve all of the users. Please check the database";
@@ -79,6 +83,24 @@ public class UserService {
             throw new DatabaseOperationException(GET_USER_BY_USERNAME_ERROR_MESSAGE);
         }
         return user;
+    }
+    
+    public List<User> getUsersByClassId(long classId){
+        List<Long> userIds = Collections.EMPTY_LIST;
+        try {
+            userIds = classMembersDao.getUserIdsByClassroomId(classId);
+        }catch(DataAccessException e) {
+            String errorMessage = "An error occured while attempting to retrieve a list of user ids from the class members table. Please check the database.";
+            logger.error(errorMessage);
+            throw new DatabaseOperationException(errorMessage + e.toString());
+        }
+        List<User> users = userIds
+                                .stream()
+                                .map(e -> {try { return get(e); } catch (InvalidObjectException | DatabaseOperationException e1) {return null; }})
+                                .filter(e -> e!=null)
+                                .collect(Collectors.toList());
+        return users;
+        
     }
     
     public boolean checkUserExists(String username) {

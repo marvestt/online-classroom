@@ -121,28 +121,35 @@ public class StudentService {
         return students;
     }
 
-    public int save(Student student) throws InvalidObjectException, DatabaseOperationException {
+    public int save(Student student) {
         int output = 0;
         logger.debug("Attempting to save the following Student object to the database: " + student);
-        validate(student);
+       
         try {
+            validate(student);
             output = studentDao.save(student);
-        } catch (DataAccessException e) {
+        } catch (DataAccessException | DatabaseOperationException e) {
             logger.error(
                     "Failed to save the Student. Check the database to make sure the students table is properly initialized");
             throw new DatabaseOperationException(SAVE_ERROR_MESSAGE + e.getMessage());
         }
+        catch(InvalidObjectException e) {
+            logger.error("The student object is in an invalid state. Please check all fields to ensure that they are valid\n" + e);
+        }
         return output;
     }
 
-    public void update(Student student) throws InvalidObjectException, DatabaseOperationException {
+    public void update(Student student) {
         logger.debug("Attempting to update the following Student object in the database: " + student);
-        validate(student);
         try {
+            validate(student);
             studentDao.update(student);
-        } catch (DataAccessException e) {
+        } catch (DataAccessException | DatabaseOperationException e) {
             logger.error("Failed to perform update. Check the Student object and students table in the database and make sure the student is present");
             throw new DatabaseOperationException(UPDATE_ERROR_MESSAGE + student.getStudentId());
+        }
+        catch(InvalidObjectException e ) {
+            logger.error("Student object provided has proven to be invalid. Please check fields for validity");
         }
     }
 

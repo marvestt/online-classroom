@@ -53,7 +53,7 @@ public class Classroom {
 
 	@Override
 	public String toString() {
-		return String.format("Class[class_id=%d, main_teacher_id=%d, name=%d,description='%s']", 
+		return String.format("Class[class_id=%d, main_teacher_id=%d, name=%s,description='%s']", 
 				classId, mainTeacherId, name,description);
 	}
 	

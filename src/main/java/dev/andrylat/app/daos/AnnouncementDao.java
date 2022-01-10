@@ -64,7 +64,7 @@ public class AnnouncementDao implements Dao<Announcement> {
     public int save(Announcement announcement) {
         logger.debug("Running query to save the following announcement object into the database: " + announcement);
         return jdbcTemplate.update(INSERT_QUERY, announcement.getClassId(), announcement.getTitle(),
-                announcement.getText(), announcement.getAnnouncementId());
+                announcement.getText());
     }
 
     @Override

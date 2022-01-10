@@ -121,16 +121,20 @@ public class TeacherService {
         return false;
     }
 
-    public int save(Teacher teacher) throws InvalidObjectException, DatabaseOperationException {
+    public int save(Teacher teacher) {
         int output = 0;
         logger.debug("Attempting to save the following Teacher object to the database: " + teacher);
-        validate(teacher);
+        
         try {
+            validate(teacher);
             output = teacherDao.save(teacher);
         } catch (DataAccessException e) {
             logger.error(
                     "Failed to save the Teacher. Check the database to make sure the teachers table is properly initialized");
             throw new DatabaseOperationException(SAVE_ERROR_MESSAGE);
+        }
+        catch(InvalidObjectException e) {
+            logger.error("Teacher object is invalid, please check state\n" + e );
         }
         return output;
     }

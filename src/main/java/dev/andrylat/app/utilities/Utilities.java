@@ -4,10 +4,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+
+import dev.andrylat.app.models.Classroom;
+import dev.andrylat.app.models.Student;
+import dev.andrylat.app.models.Teacher;
 
 public class Utilities {
     
@@ -52,4 +57,44 @@ public class Utilities {
                                                 .collect(Collectors.toList());
         return violationMessages;
     }
+    
+    public static boolean checkSessionForTeacher(HttpSession session) {
+        try{
+            return (Teacher) session.getAttribute("TEACHER") != null;
+        }
+        catch(ClassCastException e) {
+        }
+        return false;
+    }
+    
+    public static Teacher getTeacherFromSession(HttpSession session) {
+        return (Teacher)session.getAttribute("TEACHER");
+    }
+    
+    public static Student getStudentFromSession(HttpSession session) {
+        return (Student) session.getAttribute("STUDENT");
+    }
+    
+    public static boolean checkSessionForStudent(HttpSession session) {
+        try{
+            return (Student) session.getAttribute("STUDENT") != null;
+        }
+        catch(ClassCastException e) {
+        }
+        return false;
+    }
+    
+    public static boolean checkSessionForClassroom(HttpSession session) {
+        try{
+            return (Classroom) session.getAttribute("SELECTED_CLASS") != null;
+        }
+        catch(ClassCastException e) {
+        }
+        return false;
+    }
+    
+    public static Classroom getClassroomFromSession(HttpSession session) {
+        return (Classroom) session.getAttribute("SELECTED_CLASS");
+    }
+    
 }
