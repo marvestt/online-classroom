@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:insert="fragments/header :: header">
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<div th:replace="fragments/classroom-navbar :: student-navbar">
+	</div>
+
+	<main role="main">
+		<div class="col pt-2 ml-3">
+
+			<div class="row mt-5">
+				<h2>Members</h2>
+				
+			</div>
+			
+			<div class="row mt-3">
+				<table class="table table-bordered" style="width:300px;">
+					<thead>
+						<tr>
+							<th scope="col">Member</th>
+							<th scope="col">Role</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="row" th:text="${#strings.capitalizeWords(headTeacher.getProfessionalName())}"></th>
+							<td >Head Teacher</td>
+						</tr>
+						
+
+						
+						<tr th:each="teacher : ${listOfTeachers}">
+							<th scope="row" th:text="${#strings.capitalizeWords(teacher.getFirstName() + ' ' + teacher.getSurname())}"></th>
+							<td>Teacher</td>
+						</tr>
+						
+						<tr th:each="student : ${listOfStudents}">
+							<th scope="row" th:text="${#strings.capitalizeWords(student.getFirstName() + ' ' + student.getSurname())}"></th>
+							<td>Student</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>	
+		</div>
+	</main>
+
+
+</body>
+</html>

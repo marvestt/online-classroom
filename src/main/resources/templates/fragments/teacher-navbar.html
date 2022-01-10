@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+  <head>
+  
+  </head>
+  <body>
+	<div th:fragment="home-navbar">
+  
+      <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+      	<a class="nav-link" href="/home">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/new-classroom">New Classroom</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/my-classrooms">My Classrooms</a>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Account
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/signup">New Account</a>
+          <a class="dropdown-item" href="/">Log Out</a>          
+        </div>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0" th:action="@{search-classrooms}">
+      <input class="form-control mr-sm-2" name="searchText" th:value="${searchText}" type="search" placeholder="Enter classroom..." aria-label="Search">
+      <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+		
+
+      </nav>
+  
+   </div>
+  </body>
+</html>

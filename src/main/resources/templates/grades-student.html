@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:insert="fragments/header :: header">
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<div th:replace="fragments/classroom-navbar :: student-navbar">
+	</div>
+
+		<main role="main">
+		<div class="col pt-2 ml-3">
+
+			<div class="row mt-5">
+				<h2>Grades</h2>
+				
+			</div>
+			
+			<div class="row mt-3">
+				<table class="table table-bordered" style="width:300px;">
+					<thead>
+						<tr>
+							<th scope="col">Assignment</th>
+							<th scope="col">Grade</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="row"> Assignment 1</th>
+							<td>87 </td>
+						</tr>
+						
+						<tr>
+							<th scope="row"> Assignment 2</th>
+							<td>93 </td>
+						</tr>
+						
+						<tr>
+							<th scope="row"> Assignment 3</th>
+							<td>64 </td>
+						</tr>
+						
+						<tr>
+							<th scope="row"> Assignment 4</th>
+							<td>25 </td>
+						</tr>
+						
+						<tr>
+							<th scope="row"> Assignment 5</th>
+							<td>100 </td>
+						</tr>
+					</tbody>
+				</table>
+			</div>	
+		</div>
+	</main>
+	
+</body>
+</html>

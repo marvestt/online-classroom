@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:insert="fragments/header :: header">
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<div th:replace="fragments/teacher-navbar :: home-navbar">
+	</div>
+
+
+	<div class="col pt-2">
+	  <form id="create-new-classroom-form" action="/create-classroom" method="post">
+	    <div class="row mt-5">
+	      <h2 class="mb-4 ml-3 mt-4">Create a New Classroom</h2>
+	    </div>
+	
+
+	  <div class="form-group row">
+	    
+	    <div class="col-md-4">
+			<label for="classroom-name">Classroom Name</label>
+		    <input type="text" class="form-control" th:value="${classroom.name}" name="name" id="classroom-name" aria-describedby="emailHelp" placeholder="Enter class name">
+		</div>
+    
+     </div>
+  
+  <div class="form-group row">
+  	    <div class="col-md-4">
+		  	<label for="nameOfHeadTeacher">Name of Main Teacher</label>
+		    <input type="text" class="form-control" name="teacherName" id="nameOfHeadTeacher" placeholder="Enter name">
+  	    </div>
+  </div>
+  
+    <div class="form-group row">
+  	    <div class="col-md-4">
+		  	<label for="description">Subject / Curriculum</label>
+		    <input type="text" class="form-control" th:value="${classroom.description}" name="description" id="description" placeholder="Enter course description">
+  	    </div>
+  </div>
+  
+  <div class="form-group row">
+  	<div class="col-md-4 mt-2">
+	    <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </div>
+  
+    <div class="form-group row">
+  	<div class="col-md-4 mt-2">
+       	<div th:if="${errorOccured}">
+     		<p  class="mt-4">Something went wrong when trying to create a class. Try again at another time</p>
+     	</div>
+    </div>
+  </div>
+  
+
+  
+	  </form>
+	</div>
+
+</body>
+</html>

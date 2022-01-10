@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:insert="fragments/header :: header">
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<div th:replace="fragments/teacher-navbar :: home-navbar">
+	</div>
+
+	<div class="col pt-2">
+	    <div class="row mt-5">
+	      <h3 class="mb-4 ml-4 mt-4" th:text="'Would like to join the following classroom: ' + ${className} + '?'"></h3>
+	      	
+
+	    </div>
+   	    <div class="row">
+			<a th:href="@{send-join-request-{classroomId}(classroomId=${classroomId})}" 
+			type="button" class="btn btn-primary ml-5 mr-4 mt-2"
+			style="color:#ffffff">Join </a>
+			<a  href="/home" type="button" class="btn btn-secondary mt-2" >Cancel</a>	      	
+     	</div>
+ 	    <div th:if="${failedRegistration}">
+     		<p  class="mt-4">Something went wrong when trying to register for the class. Try again at another time</p>
+     	</div>
+	</div>
+
+	
+	
+</body>
+</html>

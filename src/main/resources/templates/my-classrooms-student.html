@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:insert="fragments/header :: header">
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<div th:replace="fragments/student-navbar :: home-navbar">
+	</div>
+
+	<div class="col pt-2">
+	    <div class="row mt-5">
+	      <h2 class="mb-4 ml-4 mt-4">My Classrooms</h2>
+	      
+
+	    </div>
+	</div>
+		<div class="row mt-3 ml-4">
+    <div id="listOfButtons" th:each="classroomButton : ${classroomButtons}">
+     <a th:href="@{/select-class-{classroomId}(classroomId=${classroomButton.getClassroom().getClassId()})}"
+        type="button"
+        class="btn btn-outline-secondary mb-4 mr-3 search-btn"
+        th:text="${#strings.capitalizeWords(classroomButton.toString()) }"
+      >
+        Class Name: --
+        <br />Professor: --<br />
+      </a>
+
+    </div>
+  </div>
+	
+	    <footer>
+    <script language="JavaScript" type="application/javascript" th:src="@{js/search.min.js}"></script>
+
+    </footer>    
+</body>
+</html>
