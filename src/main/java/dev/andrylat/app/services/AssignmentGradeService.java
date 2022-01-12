@@ -89,13 +89,30 @@ public class AssignmentGradeService {
 
     public List<AssignmentGrade> getAssignementGradesByStudentId(long studentId)
             throws DatabaseOperationException, InvalidObjectException {
-        List<AssignmentGrade> assignmentGrades = Collections.EMPTY_LIST;
+        List<AssignmentGrade> assignmentGrades = Collections.emptyList();
         try {
             logger.debug(
                     "Attempting to retrieve a list of all AssignmentGrades that have the studentId = " + studentId);
             assignmentGrades = assignmentGradeDao.getAssignmentGradesByStudentId(studentId);
         } catch (DataAccessException e) {
             logger.error("No AssignmentGrades with the given studentId were found. Please check the database");
+            throw new DatabaseOperationException(GET_GRADES_BY_STUDENT_ID_ERROR_MESSAGE);
+        }
+        logger.debug("Validating each AssignmentGrade object in the list");
+        for (AssignmentGrade assignmentGrade : assignmentGrades) {
+            validate(assignmentGrade);
+        }
+        return assignmentGrades;
+    }
+    
+    public List<AssignmentGrade> getAssignmentGradesByAssignmentAndStudentId(long assignmentId, long studentId) throws InvalidObjectException{
+        List<AssignmentGrade> assignmentGrades = Collections.emptyList();
+        try {
+            logger.debug(
+                    "Attempting to retrieve a list of all AssignmentGrades that have the studentId = " + studentId + "and the assignmentId =" + assignmentId);
+            assignmentGrades = assignmentGradeDao.getAssignmentGradesByAssignmentAndStudentId(assignmentId, studentId);
+        } catch (DataAccessException e) {
+            logger.error("No AssignmentGrades . Please check the database");
             throw new DatabaseOperationException(GET_GRADES_BY_STUDENT_ID_ERROR_MESSAGE);
         }
         logger.debug("Validating each AssignmentGrade object in the list");

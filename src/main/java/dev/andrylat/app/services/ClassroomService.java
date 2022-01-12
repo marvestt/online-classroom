@@ -184,4 +184,15 @@ public class ClassroomService {
             throw new DatabaseOperationException(CLASS_ID_ERROR_MESSAGE);
         }
     }
+    
+    public void removeFromClassroom(long classId, long userId) {
+        logger.debug("Attempting to delete class member with classId = " + classId + " and userId: " + userId);
+        try {
+            classMembersDao.delete(classId, userId);
+        } catch (DataAccessException | DatabaseOperationException e) {
+            logger.error(
+                    "Class member deletion failed. Check the class_members table in the database and make sure the correct class_id is used");
+            throw new DatabaseOperationException(CLASS_ID_ERROR_MESSAGE);
+        }
+    }
 }

@@ -17,18 +17,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import dev.andrylat.app.exceptions.DatabaseOperationException;
 import dev.andrylat.app.models.Classroom;
 import dev.andrylat.app.models.Teacher;
 import dev.andrylat.app.models.User;
+import dev.andrylat.app.services.ClassroomService;
 import dev.andrylat.app.services.StudentService;
 import dev.andrylat.app.services.TeacherService;
 import dev.andrylat.app.services.UserService;
 
 @Controller
-@RequestMapping(value = "/members")
 public class MembersController {
 
     @Autowired
@@ -40,9 +40,12 @@ public class MembersController {
     @Autowired 
     TeacherService teacherService;
     
+    @Autowired
+    ClassroomService classroomService;
+    
     private static final Logger logger = LoggerFactory.getLogger(MembersController.class);
     
-    @GetMapping
+    @GetMapping(value="members")
     public String viewMembersPage(Model model, HttpSession session) {
         if(!checkSessionForClassroom(session)) {
             return "redirect:/home";
@@ -74,5 +77,16 @@ public class MembersController {
             return "members-teacher";
         }
         return "redirect:/";
+    }
+    
+    @GetMapping(value = "remove-{userId}")
+    public String removeUser(Model model,
+            @PathVariable(value="userId")long userId, HttpSession session) {
+        if(!checkSessionForClassroom(session)) {
+            return "redirect:/home";
+        }
+        Classroom classroom = getClassroomFromSession(session);
+        classroomService.removeFromClassroom(classroom.getClassId(), userId);;
+        return "redirect:/members";
     }
 }

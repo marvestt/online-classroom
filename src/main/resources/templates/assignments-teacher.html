@@ -28,7 +28,7 @@
 						<p class="card-text" th:text="${assignment.getDescription()}"></p>
 						<br/>
 						<br/>
-						<a href="#" class="btn btn-primary mb-3" style="position: absolute;bottom: 0px;">View Submissions</a>
+						<a th:href="@{view-submissions-{assignmentId}(assignmentId = ${assignment.getAssignmentId()})}" class="btn btn-secondary mb-3" style="position: absolute;bottom: 0px;">View Submissions</a>
 					</div> 
 				</div>
 				
@@ -39,7 +39,7 @@
      	</div>
 			
 			<div class="row ml-1 mt-4 mb-4">
-				<a th:href="@{/write-post-{postType}(postType='assignment')}" style="text-align:right;color:white;" type="button" class="btn btn-primary">Add Assignment </a>	
+				<a th:href="@{/write-post-{postType}(postType='assignment')}" style="text-align:right;color:white;" type="button" class="btn btn-secondary">Add Assignment </a>	
 			</div>
 			
 			

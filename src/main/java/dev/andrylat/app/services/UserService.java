@@ -182,7 +182,7 @@ public class UserService {
         logger.debug("Attempting to delete User with userId = " + userId);
         try {
             userDao.delete(userId);
-        } catch (DataAccessException e) {
+        } catch (DataAccessException e) { 
             logger.error(
                     "User deletion failed. Check the users table in the database and make sure the correct user_id is used");
             throw new DatabaseOperationException(USER_ID_ERROR_MESSAGE);

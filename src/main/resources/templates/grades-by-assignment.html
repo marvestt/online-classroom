@@ -14,7 +14,7 @@
 		<div class="col pt-2 ml-3">
 
 			<div class="row mt-5">
-				<h2>Grades</h2>
+				<h2 th:text="${assignment.getTitle() + ' - Grades'}">Grades</h2>
 				
 			</div>
 			
@@ -22,14 +22,14 @@
 				<table class="table table-bordered" style="width:350px;">
 					<thead>
 						<tr>
-							<th scope="col">Assignment</th>
-							<th scope="col"></th>
+							<th scope="col">Student</th>
+							<th scope="col">Grades</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="assignment : ${listOfAssignments}">
-							<th scope="row" th:text="${assignment.getTitle()}"> </th>
-							<td><a th:href="@{view-grades-for-assignment-{assignmentId}(assignmentId = ${assignment.getAssignmentId()})}" class="btn btn-secondary" style="color:white;">View Grades</a> </td>
+						<tr th:each="grade : ${listOfGrades}">
+							<td scope="row" th:text="${studentIdToStudent.get(grade.getStudentId()).getFirstName() + ' ' + studentIdToStudent.get(grade.getStudentId()).getSurname()}"> </td>
+							<td th:text="${grade.getGrade()}"> </td>
 						</tr>
 					</tbody>
 				</table>

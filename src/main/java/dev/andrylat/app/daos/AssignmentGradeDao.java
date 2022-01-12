@@ -23,6 +23,7 @@ public class AssignmentGradeDao implements Dao<AssignmentGrade>{
 	private static final String SELECT_BY_ASSIGNMENT_GRADE_ID_QUERY = "SELECT * FROM assignment_grades WHERE assignment_grade_id=?";
 	private static final String SELECT_BY_ASSIGNMENT_ID_QUERY = "SELECT * FROM assignment_grades WHERE assignment_id=?";
 	private static final String SELECT_BY_STUDENT_ID_QUERY = "SELECT * FROM assignment_grades WHERE student_id=?";
+	private static final String SELECT_BY_ASSIGNMENT_AND_STUDENT_ID_QUERY = "SELECT * FROM assignment_grades WHERE assignment_id=? AND student_id=? ";
 	private static final String SELECT_ALL_QUERY = "SELECT * FROM assignment_grades";
     private static final String LIMIT = " LIMIT ";
     private static final String OFFSET = " OFFSET ";
@@ -62,6 +63,11 @@ public class AssignmentGradeDao implements Dao<AssignmentGrade>{
 	public List<AssignmentGrade> getAssignmentGradesByStudentId(long studentId){
 	    logger.debug("Running query to retrieve list of AssignmentGrades by studentId:" + studentId);
 	    return jdbcTemplate.query(SELECT_BY_STUDENT_ID_QUERY, new AssignmentGradeMapper(), studentId);
+	}
+	
+	public List<AssignmentGrade> getAssignmentGradesByAssignmentAndStudentId(long assignmentId,long studentId){
+	    logger.debug("Running query to retrieve list of AssignmentGrades by assignmentId and studentId: " + assignmentId + " " + studentId );
+	    return jdbcTemplate.query(SELECT_BY_ASSIGNMENT_AND_STUDENT_ID_QUERY, new AssignmentGradeMapper(), assignmentId,studentId);
 	}
 	
 	@Override

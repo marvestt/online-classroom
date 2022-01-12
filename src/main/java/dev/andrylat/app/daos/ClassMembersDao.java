@@ -23,6 +23,7 @@ public class ClassMembersDao {
     private static final String SELECT_BY_CLASS_ID = "SELECT user_id FROM class_members WHERE class_id=?";
     private static final String INSERT = "INSERT INTO public.class_members (user_id,class_id) "
             + " VALUES(?,?);";
+    private static final String DELETE = "DELETE FROM class_members WHERE user_id = ? AND class_id=?;";
     
     public List<Long> getClassroomIdsByUserId(Long userId){
         logger.debug("Running query to retrieve all class ids from class_members table where the provided user id is found");
@@ -37,5 +38,10 @@ public class ClassMembersDao {
     public void addUserToClassroom(Long userId, Long classId) {
         logger.debug("Running query to save the user into the class_members table along with the corresponding class id");
         jdbcTemplate.update(INSERT,userId,classId);
+    }
+    
+    public void delete(long classId, long userId) {
+        logger.debug("Running query to delete Class member with from the following classId: " + classId);
+        jdbcTemplate.update(DELETE, userId,classId);
     }
 }

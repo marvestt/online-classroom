@@ -27,29 +27,9 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<th scope="row"> Assignment 1</th>
-							<td>87 </td>
-						</tr>
-						
-						<tr>
-							<th scope="row"> Assignment 2</th>
-							<td>93 </td>
-						</tr>
-						
-						<tr>
-							<th scope="row"> Assignment 3</th>
-							<td>64 </td>
-						</tr>
-						
-						<tr>
-							<th scope="row"> Assignment 4</th>
-							<td>25 </td>
-						</tr>
-						
-						<tr>
-							<th scope="row"> Assignment 5</th>
-							<td>100 </td>
+						<tr th:each="grade : ${listOfGrades}">
+							<td scope="row" th:text="${assignmentIdToAssignment.get(grade.getAssignmentId()).getTitle()}"> Assignment</td>
+							<td th:text="${grade.getGrade()}"> </td>
 						</tr>
 					</tbody>
 				</table>

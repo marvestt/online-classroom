@@ -14,7 +14,7 @@
 		<div class="col pt-2 ml-3">
 
 			<div class="row mt-5">
-				<h2>Grades</h2>
+				<h2>Submissions</h2>
 				
 			</div>
 			
@@ -22,23 +22,27 @@
 				<table class="table table-bordered" style="width:350px;">
 					<thead>
 						<tr>
-							<th scope="col">Assignment</th>
+							<th scope="col">Student</th>
 							<th scope="col"></th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="assignment : ${listOfAssignments}">
-							<th scope="row" th:text="${assignment.getTitle()}"> </th>
-							<td><a th:href="@{view-grades-for-assignment-{assignmentId}(assignmentId = ${assignment.getAssignmentId()})}" class="btn btn-secondary" style="color:white;">View Grades</a> </td>
+						<tr th:each="student : ${listOfStudents}">
+							<th scope="row" th:text="${student.getFirstName() + ' ' + student.getSurname()}" >Student Name </th>
+							<td > <a th:href="@{/view-submission-{assignmentId}-{studentId}(assignmentId=${assignmentId},studentId=${student.getStudentId()})}" class="btn btn-secondary">View Submission</a></td>
 						</tr>
+						
 					</tbody>
 				</table>
-			</div>	
-       	<div th:if="${errorOccured}">
-     		<p  class="mt-4">Something went wrong with loading the grades table. Please try again at a later time</p>
-     	</div>
+			</div>
+			<a href="/assignments" class="btn btn-secondary">Back</a>
 		</div>
+		
+       	<div th:if="${errorOccured}">
+     		<p  class="mt-4">Something went wrong when retrieving the submissions. Please try again at another time</p>
+     	</div>
 	</main>
-	
+
+
 </body>
 </html>

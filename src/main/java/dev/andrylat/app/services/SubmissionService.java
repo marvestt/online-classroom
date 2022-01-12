@@ -102,6 +102,21 @@ public class SubmissionService {
         }
         return submissions;
     }
+    
+    public Submission getSubmissionByStudentAndAssignmentId(long studentId, long assignmentId) {
+        Submission submission = null;
+        try {
+            logger.debug(
+                    "Attempting to retrieve Submission object from the database with a assignmentId = " + assignmentId + " and studentId = "  + studentId);
+            submission = submissionDao.getSubmissionByStudentAndAssignmentId(studentId, assignmentId);
+        } catch (DataAccessException e) {
+            logger.error(
+                    "The Submission could not be found in the database. Check the records to make sure the following assignmentId and studentId is present in the submissions table: "
+                            + assignmentId + " studentId=" + studentId );
+            throw new DatabaseOperationException(SUBMISSION_ID_ERROR_MESSAGE);
+        }
+        return submission;
+    }
 
     public Page<Submission> getAll(Pageable page) throws DatabaseOperationException, InvalidObjectException {
         Page<Submission> submissions = new PageImpl<>(Collections.EMPTY_LIST);

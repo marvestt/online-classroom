@@ -38,13 +38,13 @@
 						<tr th:each="teacher : ${listOfTeachers}">
 							<th scope="row" th:text="${#strings.capitalizeWords(teacher.getFirstName() + ' ' + teacher.getSurname())}"></th>
 							<td>Teacher</td>
-							<td> <a class="btn btn-danger" style="color:white;">Remove</a> </td>
+							<td> <a th:href="@{remove-{userId}(userId = ${teacher.getUserId()})}" class="btn btn-danger" style="color:white;">Remove</a> </td>
 						</tr>
 						
 						<tr th:each="student : ${listOfStudents}">
 							<th scope="row" th:text="${#strings.capitalizeWords(student.getFirstName() + ' ' + student.getSurname())}"></th>
 							<td>Student</td>
-							<td> <a class="btn btn-danger" style="color:white;">Remove</a> </td>
+							<td> <a th:href="@{remove-{userId}(userId=${student.getUserId()})}" class="btn btn-danger" style="color:white;">Remove</a> </td>
 						</tr>
 						
 					</tbody>

@@ -23,6 +23,8 @@ public class SubmissionDao implements Dao<Submission> {
     private static final String SELECT_BY_SUBMISSION_ID_QUERY = "SELECT * FROM submissions WHERE submission_id=?";
     private static final String SELECT_BY_STUDENT_ID_QUERY = "SELECT * FROM submissions WHERE student_id=?";
     private static final String SELECT_BY_ASSIGNMENT_ID_QUERY = "SELECT * FROM submissions WHERE assignment_id=?";
+    private static final String SELECT_BY_ASSIGNMENT_ID_AND_STUDENT_ID = "SELECT * FROM submissions WHERE "
+            + "assignment_id=? AND student_id=?";
     private static final String SELECT_ALL_QUERY = "SELECT * FROM submissions";
     private static final String LIMIT = " LIMIT ";
     private static final String OFFSET = " OFFSET ";
@@ -58,6 +60,11 @@ public class SubmissionDao implements Dao<Submission> {
     public List<Submission> getSubmissionsByAssignmentId(long assignmentId) {
         logger.debug("Running query to retrieve list of Submissions by assignmentId: " + assignmentId);
         return jdbcTemplate.query(SELECT_BY_ASSIGNMENT_ID_QUERY, new SubmissionMapper(), assignmentId);
+    }
+    
+    public Submission getSubmissionByStudentAndAssignmentId(long studentId, long assignmentId) {
+        List <Submission> submissions = jdbcTemplate.query(SELECT_BY_ASSIGNMENT_ID_AND_STUDENT_ID, new SubmissionMapper(),assignmentId,studentId);
+        return (submissions!= null && !submissions.isEmpty()) ? submissions.get(0) : null;
     }
 
     @Override

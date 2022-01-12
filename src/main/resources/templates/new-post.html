@@ -24,16 +24,16 @@
 		  <div class="form-group row">
 		    
 		    <div class="col-md-5">
-				<label for="classroom-name">Title</label>
-			    <input type="text" class="form-control"  name="title" th:placeholder="${'Enter ' + postType + ' title'}">
+				<label for="title-of-post">Title</label>
+			    <input type="text" id="title-of-post" class="form-control"  name="title" th:placeholder="${'Enter ' + postType + ' title'}">
 			</div>
 	    
 	     </div>
 	  
 	  <div class="form-group row">
 	  	    <div class="col-md-5">
-			  	<label for="contentOfPost">Content</label>
-			    <textarea class="form-control" rows="5" name="content" id="contentOfPost" placeholder="Enter details or text here ..."></textarea>
+			  	<label for="content-of-post">Content</label>
+			    <textarea class="form-control" rows="5" name="content" id="content-of-post" placeholder="Enter details or text here ..."></textarea>
 	  	    </div>
 	  </div>
 	  
@@ -45,9 +45,6 @@
 	   
 	  </main>
 
-  
-
-  
 	  </form>
 	  
        	<div th:if="${errorOccured}">
