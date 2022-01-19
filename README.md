@@ -2,7 +2,6 @@
 
 <br>
 
-![](images/teacher-signup.gif)
 The Online Classroom Web Application allows teachers and students to create accounts, create and join classrooms, and interact in an online classroom environment. Teachers have the option of creating classrooms, posting new assignments, announcements, lessons for the class and also grading the responses that the students submit. Students are able to join classrooms by searching for them with the search bar. Once they join, they will have the option to view lessons, assignments, grades, etc.
 <br><br>
 To access this web-app, please use the link: newclassroon.net
@@ -50,7 +49,7 @@ Adding announcements for all members to see in the classroom. Announcement topic
 Teachers are free to add lessons to the classroom, but have to take note that there is a 2500 character limit on the body of the text, and if an input exceeds that, like in the gif above, an error message will be displayed
 <br>
 
-![](images/adding-lessons.gif)
+![](images/adding-lesson.gif)
 
 <br>
 Here the second lesson is added with an appropriate size and viewed afterwards
