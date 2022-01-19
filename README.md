@@ -48,6 +48,8 @@ Adding announcements for all members to see in the classroom. Announcement topic
 <br>
 Teachers are free to add lessons to the classroom, but have to take note that there is a 2500 character limit on the body of the text, and if an input exceeds that, like in the gif above, an error message will be displayed
 <br>
+<br>
+<br>
 
 ![](images/adding-lesson.gif)
 
