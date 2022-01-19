@@ -31,6 +31,7 @@ Teachers are able to create classrooms very easily by clicking the option at the
 <br>
 
 <a name="view-classroom-as-teacher"/>
+
 ## Viewing Classroom as a Teacher
 
 ![](images/viewing-classroom-as-teacher.gif)
