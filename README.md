@@ -9,6 +9,11 @@ To access the web-app, please use the link: [newclassroom.net](https://newclassr
 Feel free to create an account and get started!
 <br><br>
 
+##### Table of Contents  
+[Viewing Classroom as a Teacher](#view-classroom-as-teacher)
+
+<br><br>
+
 ## Signing Up as a Teacher
 
 ![](images/teacher-signup.gif)
@@ -25,6 +30,7 @@ Users can register their account as a teacher, which will give them access to cl
 Teachers are able to create classrooms very easily by clicking the option at the top of the navigation bar and providing the necessary information for classroom creation
 <br>
 
+<a name="view-classroom-as-teacher"/>
 ## Viewing Classroom as a Teacher
 
 ![](images/viewing-classroom-as-teacher.gif)
