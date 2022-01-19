@@ -20,11 +20,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import dev.andrylat.app.exceptions.DatabaseOperationException;
+import dev.andrylat.app.models.AssignmentGrade;
 import dev.andrylat.app.models.Classroom;
+import dev.andrylat.app.models.Submission;
 import dev.andrylat.app.models.Teacher;
 import dev.andrylat.app.models.User;
+import dev.andrylat.app.services.AssignmentGradeService;
 import dev.andrylat.app.services.ClassroomService;
 import dev.andrylat.app.services.StudentService;
+import dev.andrylat.app.services.SubmissionService;
 import dev.andrylat.app.services.TeacherService;
 import dev.andrylat.app.services.UserService;
 
@@ -42,6 +46,12 @@ public class MembersController {
     
     @Autowired
     ClassroomService classroomService;
+    
+    @Autowired
+    SubmissionService submissionService;
+    
+    @Autowired
+    AssignmentGradeService gradeService;
     
     private static final Logger logger = LoggerFactory.getLogger(MembersController.class);
     
@@ -86,6 +96,15 @@ public class MembersController {
             return "redirect:/home";
         }
         Classroom classroom = getClassroomFromSession(session);
+        try {
+            long studentId = studentService.getStudentByUserId(userId).getStudentId();
+            List<Submission> submissions = submissionService.getSubmissionsByStudentId(studentId);
+            List<AssignmentGrade> grades = gradeService.getAssignementGradesByStudentId(studentId);
+            submissions.forEach(e -> submissionService.delete(e.getSubmissionId()));
+            grades.forEach(e -> gradeService.delete(e.getAssignmentGradeId()));
+        } catch (InvalidObjectException | DatabaseOperationException e) {
+            logger.error(e.toString());
+        }
         classroomService.removeFromClassroom(classroom.getClassId(), userId);;
         return "redirect:/members";
     }
