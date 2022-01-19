@@ -72,7 +72,7 @@ Teachers are free to add assignments to the classrooms so that students can view
 Teachers have the option to view student submissions and to submit grades. The grades are open to whatever the teacher would like to assign. They can be either numeric or letter grades (A, B, C+, etc). This gives teachers the flexibility of assigning grades in whatever format they like.
 <br>
 
-## Viewing Grades
+## Viewing Grades as Teacher
 ![](images/viewing-grades-as-teacher.gif)
 
 <br>
@@ -99,5 +99,29 @@ Students are also able to easily register for a new account by signing up, simil
 ![](images/viewing-classroom-as-student.gif)
 
 <br>
+The student view of the classroom differs slightly from that of the teachers. Students are able to view all announcements, assignments, and lessons, but not add any new ones.
+<br>
 
+## Submitting Assignment
+
+![](images/submitting-assignment.gif)
+
+<br>
+Students can submit their responses to the assignments posted by teachers through the assignments page. If a student resubmits an assignment, it erases the previous submission
+<br>
+
+## Viewing Grades as Student
+
+![](images/viewing-grades-as-student.gif)
+
+<br>
+Student view of the grades page displays all of their grades for the assignments that have been submitted and graded.
+<br>
+
+## Viewing Members Page as Student
+
+![](images/viewing-members-list-as-student.gif)
+
+<br>
+Students can also view a list of members, which displays which users are teachers or students
 <br>
