@@ -10,20 +10,20 @@ Feel free to create an account and get started!
 <br><br>
 
 ##### Table of Contents
-[Signing Up as a Teacher](#signing-up-teacher)
-[Creating a Classroom](#creating-classroom)
-[Viewing Classroom as a Teacher](#viewing-classroom-teacher)
-[Adding Announcements](#adding-announcements)
-[Adding Lessons](#adding-lessons)
-[Adding Assignments](#adding-assignments)
-[Grading Assignments](#grading-assignments)
-[Viewing Grades as a Teacher](#viewing-grades-teacher)
-[Removing Students](#removing-students)
-[Student Sign up](#signup-student)
-[Viewing Classroom as a Student](#viewing-classroom-student)
-[Submitting Assignments](#submitting-assignments)
-[Viewing Grades as a Student](#viewing-grades-student)
-[Viewing Members Page as a Student](#viewing-members-page-student)
+[Signing Up as a Teacher](#signing-up-teacher)<br>
+[Creating a Classroom](#creating-classroom)<br>
+[Viewing Classroom as a Teacher](#viewing-classroom-teacher)<br>
+[Adding Announcements](#adding-announcements)<br>
+[Adding Lessons](#adding-lessons)<br>
+[Adding Assignments](#adding-assignments)<br>
+[Grading Assignments](#grading-assignments)<br>
+[Viewing Grades as a Teacher](#viewing-grades-teacher)<br>
+[Removing Students](#removing-students)<br>
+[Student Sign up](#signup-student)<br>
+[Viewing Classroom as a Student](#viewing-classroom-student)<br>
+[Submitting Assignments](#submitting-assignments)<br>
+[Viewing Grades as a Student](#viewing-grades-student)<br>
+[Viewing Members Page as a Student](#viewing-members-page-student)<br>
 
 <br><br>
 
