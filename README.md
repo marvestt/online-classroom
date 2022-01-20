@@ -25,7 +25,7 @@ Feel free to create an account and get started!
 [Viewing Grades as a Student](#viewing-grades-student)<br>
 [Viewing Members Page as a Student](#viewing-members-page-student)<br>
 
-<br><br>
+<br>
 
 <a name="signing-up-teacher"/>
 
