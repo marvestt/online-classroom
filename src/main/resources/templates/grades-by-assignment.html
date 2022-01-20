@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:insert="fragments/header :: header">
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<div th:replace="fragments/classroom-navbar :: teacher-navbar">
+	</div>
+
+	<main role="main">
+		<div class="col pt-2 ml-3">
+
+			<div class="row mt-5">
+				<h2 th:text="${assignment.getTitle() + ' - Grades'}">Grades</h2>
+				
+			</div>
+			
+			<div class="row mt-3">
+				<table class="table table-bordered" style="width:350px;">
+					<thead>
+						<tr>
+							<th scope="col">Student</th>
+							<th scope="col">Grades</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="grade : ${listOfGrades}">
+							<td scope="row" th:text="${studentIdToStudent.get(grade.getStudentId()).getFirstName() + ' ' + studentIdToStudent.get(grade.getStudentId()).getSurname()}"> </td>
+							<td th:text="${grade.getGrade()}"> </td>
+						</tr>
+					</tbody>
+				</table>
+			</div>	
+       	<div th:if="${errorOccured}">
+     		<p  class="mt-4">Something went wrong with loading the grades table. Please try again at a later time</p>
+     	</div>
+		</div>
+	</main>
+	
+</body>
+</html>

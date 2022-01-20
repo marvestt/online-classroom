@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:insert="fragments/header :: header">
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<div th:replace="fragments/classroom-navbar :: teacher-navbar">
+	</div>
+
+
+	<div class="col mt-1">
+	  <form id="add-new-post" th:action="@{/create-post-{postType}(postType = ${postType})}" method="post">
+	  
+		  <main role="main">
+		   
+		   		    <div class="row mt-5">
+		      <h2 class="mb-4 ml-3 mt-4 pt-4" th:text="'Add New ' + ${#strings.capitalizeWords(postType)}">Add New Post</h2>
+		    </div>
+		
+	
+		  <div class="form-group row">
+		    
+		    <div class="col-md-5">
+				<label for="title-of-post">Title</label>
+			    <input type="text" id="title-of-post" class="form-control"  name="title" th:placeholder="${'Enter ' + postType + ' title'}">
+			</div>
+	    
+	     </div>
+	  
+	  <div class="form-group row">
+	  	    <div class="col-md-5">
+			  	<label for="content-of-post">Content</label>
+			    <textarea class="form-control" rows="5" name="content" id="content-of-post" placeholder="Enter details or text here ..."></textarea>
+	  	    </div>
+	  </div>
+	  
+	  <div class="form-group row">
+	  	<div class="col-md-4 mt-2">
+		    <button type="submit" class="btn btn-primary">Submit</button>
+	    </div>
+	  </div>
+	   
+	  </main>
+
+	  </form>
+	  
+       	<div th:if="${errorOccured}">
+     		<p  class="mt-4">Something went wrong. Make sure to enter a valid input and try again </p>
+     	</div>
+	</div>
+
+</body>
+</html>

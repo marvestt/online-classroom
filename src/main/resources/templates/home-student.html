@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:insert="fragments/header :: header">
+    <title>Home</title>
+</head>
+
+<body>
+	  <div th:replace="fragments/student-navbar :: home-navbar">
+	  </div>
+
+      <main role="main" class="container mt-5">
+          <div class="jumbotron">
+              <h1>Online Classroom</h1>
+              <br />
+              <p class="lead">Find the best classroom that satisfies all your needs where you can interact directly with a teacher, work on and view assignments, grades, and lessons.</p>
+			  <br/>
+              <h3>Instructions</h3>
+
+              <p class="lead">You can access all of your classes by using clicking "My Classrooms" link at the top of the screen, or by searching for a class using the search functionality. Once a class is selected, you will have access to the following features by clicking the menu icon at the top left of the screen. The options for the features include the following:</p>
+              <br/>
+              <h4>Classrooms</h4>
+              <p class="lead">Here you can view and search for any of the classrooms already posted by teachers. You can apply to join a classroom and any of the teachers in the classroom are able to accept your request</p>
+              <br/>
+              <h4>Lessons</h4>
+              <p class="lead">Here you can view  a list of all the lessons in the classroom. If you can't view any of the lessons, please contact the teacher and ask for help</p>
+              <br/>
+              <h4>Announcements</h4>
+              <p class="lead">Classroom announcements will be posted here for everyone to see. These may include exams, assignments, due dates, changes in schedule, or any important events coming up for the class.</p>
+              <br/>
+              <h4>Assignments</h4>
+              <p class="lead">Assignments will be posted here for students to read over and respond to. Submissions should consist of a title and body/content</p>
+              <br/>
+              <h4>Grades</h4>
+              <p class="lead">Grades for exams and assignments will be posted for students to go over in order to keep track of their progress</p>
+              <br/>
+              <h4>Members</h4>
+              <p class="lead">A list of all members in the classroom, including teachers and students </p>
+              
+          </div>
+      </main>
+
+</body>
+</html>

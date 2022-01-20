@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:insert="fragments/header :: header">
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<div th:replace="fragments/classroom-navbar :: student-navbar">
+	</div>
+	
+	
+	<div class="col pt-1">
+		<main role="main">
+			<div class="row mt-5">
+				<h2 class="mb-4 ml-3"> Lessons </h2>
+			
+				
+			
+			</div>
+			
+			<div class="row mt-3">
+				<div class="col-md-10 offeset-md-2">
+					<div id="carouselExampleControls" class="carousel slide align-middle" data-ride="carousel" data-interval="false"> 
+						<div class="carousel-inner ">
+
+
+							<div th:each="lesson:${listOfLessons}"  th:class="${lesson==listOfLessons[0]} ?  'carousel-item active' : 'carousel-item' ">
+				                <div class="jumbotron " style="min-height:600px;"> 
+				                  <form class="form-inline justify-content-center">
+				                    <h3 th:text="${lesson.getTitle()}"></h3>
+				                  </form>
+				                     <br/>
+								
+								<p th:text="${lesson.getText()}"></p>
+								<form class="form-inline justify-content-center">
+									
+								</form>
+			                 </div>    
+							</div>
+							
+						</div>
+						
+						  <a  th:if="${listOfLessons != null} and ${not #lists.isEmpty(listOfLessons)}" class="carousel-control-prev" id="left-carousel-button" href="#carouselExampleControls" role="button" data-slide="prev">
+						    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						    <span class="sr-only">Previous</span>
+						  </a>
+						  <a  th:if="${listOfLessons != null} and ${not #lists.isEmpty(listOfLessons)}" class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+						    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+						    <span class="sr-only">Next</span>
+						  </a>	
+					</div>
+					
+				</div>			
+			</div>
+			
+       	<div th:if="${errorOccured}">
+     		<p  class="mt-4">Something went wrong with loading the lessons. Try to access this page again at another time </p>
+     	</div>
+			
+		</main>
+	</div>
+
+</body>
+</html>

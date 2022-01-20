@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Login</title>
+	<head th:insert="fragments/header :: header">
+</head>
+<body>
+<div class="container-fluid text-center">
+    <div>
+        <img class="img-fluid" th:src="@{images/notebook-icon.jpg}" width="200" height="200" />
+    </div>
+
+    <form th:action="@{/login}" th:object="${user}" method="post" style="max-width: 350px; margin: 0 auto;">
+         
+        <div class="border border-secondary p-3 rounded">
+            <p>Log In</p>
+            <p>
+                <input type="text" name="username" th:field="*{username}" class="form-control" placeholder="Username" required autofocus/>
+            </p>
+            <p>
+                <input type="password" name="password" th:field="*{password}" class="form-control" placeholder="Password" required />
+            </p>
+            <p>
+            	<button type="submit" class="btn btn-primary mr-4 mt-3" >Login</button>
+     	      
+               	<a href="/signup" class="btn btn-secondary mt-3">Sign Up</a>
+            </p>
+        </div>
+    </form> 
+    
+    	<div th:if="${validationMessages != null} and ${not #lists.isEmpty(validationMessages)}" class="modal" id="error-modal" tabindex="1" role="dialog">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title">Error</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		      
+		      <ul>
+		      	<li th:each = "validationMessage : ${validationMessages}" th:text="${validationMessage}"> Error Occurred</li>
+		      </ul>
+		        <p></p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+
+</div>
+
+    <footer>
+    <script language="JavaScript" type="application/javascript" th:src="@{js/signup.min.js}"></script>
+
+    </footer> 
+</body>
+</html>

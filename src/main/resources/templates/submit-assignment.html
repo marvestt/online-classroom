@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:insert="fragments/header :: header">
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<div th:replace="fragments/classroom-navbar :: student-navbar">
+	</div>
+	
+		<div class="col mt-1">
+	  <form id="submit-assignment-form" th:action="@{/submit-assignment-{assignmentId}(assignmentId = ${assignment.getAssignmentId()})}" method="post">
+	  
+		  <main role="main">
+		   
+   		    <div class="row mt-5">
+		      <h2 class="mb-4 ml-3 mt-4 pt-4" >Submit</h2>
+		    </div>
+		
+   		    <div class="row mt-3">
+		      <h5 class="mb-3 ml-3 " th:if="${assignment!=null}" th:text="${assignment.getTitle()}" >Assignment Title</h5>
+		    </div>
+		    
+     		 <div class="row">
+     		 	<div class="col-sm">
+     		 		<p class="mb-4 ml-1 " th:if="${assignment!=null}" th:text="${assignment.getDescription()}" >Assignment Text can go here. This will be the description of the assignment</p>	
+     		 	</div>
+     		 	<div class="col-sm">
+     		 	</div>
+		      
+		    </div>
+			<br/>
+		  <div class="form-group row">
+		    
+		    <div class="col-md-5">
+				<label for="classroom-name">Title</label>
+			    <input type="text" class="form-control"  name="title" placeholder="Enter Submission Title">
+			</div>
+	    
+	     </div>
+	  
+	  <div class="form-group row">
+	  	    <div class="col-md-5">
+			  	<label for="contentOfPost">Content</label>
+			    <textarea class="form-control" rows="5" name="content" id="contentOfPost" placeholder="Enter assignment content here... "></textarea>
+	  	    </div>
+	  </div>
+	  
+	  <div class="form-group row  mt-2">
+	  	
+		    <button type="submit" class="btn btn-primary ml-3">Submit</button>
+	
+	 
+		    <a href="/assignments" type="submit" class="btn btn-secondary ml-4">Back</a>
+	 
+	  </div>
+	   
+	  </main>
+
+	  </form>
+	  
+       	<div th:if="${errorOccured}">
+     		<p  class="mt-4">Something went wrong with the assignment or submission. Please make sure to enter a valid input</p>
+     	</div>
+     	
+     	<div th:if="${submitted}">
+     		<p  class="mt-4">You've successfully submitted your assignment! </p>
+     	</div>
+	</div>
+
+</body>
+</html>

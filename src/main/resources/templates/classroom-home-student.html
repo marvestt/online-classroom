@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:insert="fragments/header :: header">
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<div th:replace="fragments/classroom-navbar :: student-navbar">
+	</div>
+
+	<div class="col pt-2">
+	  
+
+     	
+     	<main role="main" class="container mt-2">
+     	
+     		    <div class="row mt-5">
+	      <h2 class="mb-4 ml-3" th:text="${classroomName} + ' - Announcements'">Announcements</h2>
+	    </div>
+	
+	     <div th:if="${joined}">
+     		<p  class="mt-2 mb-4">You've successfully joined the class! Menu options are available at the top left of the screen</p>
+     	</div>
+     	<br/>
+     	
+  		    <div th:each="announcement : ${listOfAnnouncements}" class="jumbotron">
+     			<h2 th:text="${announcement.getTitle()}"></h2>
+     			<br/>
+     			<p class="lead" th:text="${announcement.getText()}"></p>
+     		</div>
+     		
+  		       	<div th:if="${errorOccured}">
+     		<p  class="mt-4">Something went wrong when loading announcements. Please Try again later </p>
+     	</div>
+     	</main>
+	</div>   
+
+</body>
+</html>

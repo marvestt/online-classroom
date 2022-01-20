@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:insert="fragments/header :: header">
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<div th:replace="fragments/classroom-navbar :: teacher-navbar">
+	</div>
+
+	<main role="main">
+		<div class="col pt-1 pl-4">
+	
+			<div class="row mt-5 ml-1 mb-2">
+				<h2> Assignments </h2>
+			</div>
+			
+			
+			<div class="row ml-1 mb-2">
+
+				
+				<div th:each="assignment : ${listOfAssignments}" class="card mt-3 mr-4" style="width: 18rem;">
+					<img class="card-img-top" style="height:250px;" src="http://www.mcicon.com/wp-content/uploads/2021/02/Technology_Notepad_1-copy-5.jpg" alt="">
+					<div class="card-body">
+						<h5 class="card-title" th:text="${assignment.getTitle()}"></h5>
+						<p class="card-text" th:text="${assignment.getDescription()}"></p>
+						<br/>
+						<br/>
+						<a th:href="@{view-submissions-{assignmentId}(assignmentId = ${assignment.getAssignmentId()})}" class="btn btn-secondary mb-3" style="position: absolute;bottom: 0px;">View Submissions</a>
+					</div> 
+				</div>
+				
+			</div>
+			
+		<div th:if="${errorOccured}">
+     		<p  class="mt-4">Something went wrong when loading the assignments. Please Try again later </p>
+     	</div>
+			
+			<div class="row ml-1 mt-4 mb-4">
+				<a th:href="@{/write-post-{postType}(postType='assignment')}" style="text-align:right;color:white;" type="button" class="btn btn-secondary">Add Assignment </a>	
+			</div>
+			
+			
+	
+		</div>
+	</main>
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:insert="fragments/header :: header">
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<div th:replace="fragments/classroom-navbar :: teacher-navbar">
+	</div>
+
+	<main role="main">
+		<div class="col pt-2 ml-3">
+
+			<div class="row mt-5">
+				<h2>Submissions</h2>
+				
+			</div>
+			
+			<div class="row mt-3">
+				<table class="table table-bordered" style="width:350px;">
+					<thead>
+						<tr>
+							<th scope="col">Student</th>
+							<th scope="col"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="student : ${listOfStudents}">
+							<th scope="row" th:text="${student.getFirstName() + ' ' + student.getSurname()}" >Student Name </th>
+							<td > <a th:href="@{/view-submission-{assignmentId}-{studentId}(assignmentId=${assignmentId},studentId=${student.getStudentId()})}" class="btn btn-secondary">View Submission</a></td>
+						</tr>
+						
+					</tbody>
+				</table>
+			</div>
+			<a href="/assignments" class="btn btn-secondary">Back</a>
+		</div>
+		
+       	<div th:if="${errorOccured}">
+     		<p  class="mt-4">Something went wrong when retrieving the submissions. Please try again at another time</p>
+     	</div>
+	</main>
+
+
+</body>
+</html>

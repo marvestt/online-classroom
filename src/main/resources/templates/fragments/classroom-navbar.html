@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+  <head>
+  
+  </head>
+  <body>
+	<div th:fragment="teacher-navbar">
+  
+      <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <span style="font-size:30px;cursor:pointer;color:gray;" class="pr-4" onclick="openNav()">&#9776;</span>
+        
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+      	<a class="nav-link" href="/home">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/new-classroom">New Classroom</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/my-classrooms">My Classrooms</a>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Account
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/signup">New Account</a>
+          <a class="dropdown-item" href="/">Log Out</a>          
+        </div>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0" th:action="@{search-classrooms}">
+      <input class="form-control mr-sm-2" name="searchText" th:value="${searchText}" type="search" placeholder="Enter classroom..." aria-label="Search">
+      <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+  
+      </nav>
+      
+      <div class="container mt-5"> 
+      <div id="mySidenav" class="sidenav mt-5" style="background-color: #343a40 ;">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="/lessons">Lessons</a>
+        <a href="/classroom">Announcements</a>
+        <a href="/assignments">Assignments</a>
+        <a href="/grades">Grades</a>
+        <a href="/members">Members</a>
+      </div>
+      
+      
+    </div> 
+  
+      <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="../../assets/js/vendor/popper.min.js"></script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous"></script>
+    
+    
+    <script>
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+        document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+        document.getElementById("left-carousel-button").style.display = "none";
+      }
+
+      function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+        document.body.style.backgroundColor = "white";
+        document.getElementById("left-carousel-button").style.display = "";
+      }
+    </script>
+  
+   </div>
+   
+   <div th:fragment="student-navbar">
+  
+      <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <span style="font-size:30px;cursor:pointer;color:gray;" class="pr-4" onclick="openNav()">&#9776;</span>
+        
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+      	<a class="nav-link" href="/home">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/my-classrooms">My Classrooms</a>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Account
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/signup">New Account</a>
+          <a class="dropdown-item" href="/">Log Out</a>          
+        </div>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0" th:action="@{search-classrooms}">
+      <input class="form-control mr-sm-2" name="searchText" th:value="${searchText}" type="search" placeholder="Enter classroom..." aria-label="Search">
+      <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+  
+      </nav>
+      
+      <div class="container mt-5"> 
+      <div id="mySidenav" class="sidenav mt-5" style="background-color: #343a40 ;">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="/lessons">Lessons</a>
+        <a href="/classroom">Announcements</a>
+        <a href="/assignments">Assignments</a>
+        <a href="/grades">Grades</a>
+        <a href="/members">Members</a>
+      </div>
+      
+      
+    </div> 
+  
+      <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="../../assets/js/vendor/popper.min.js"></script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous"></script>
+    
+    
+    <script>
+      function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+        document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+        document.getElementById("left-carousel-button").style.display = "none";
+      }
+
+      function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+        document.body.style.backgroundColor = "white";
+        document.getElementById("left-carousel-button").style.display = "";
+      }
+    </script>
+  
+   </div>
+  </body>
+</html>
