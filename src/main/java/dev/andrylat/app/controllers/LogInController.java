@@ -42,7 +42,7 @@ public class LogInController {
     
     
     @GetMapping(value = "/home")
-    public String viewHopePage(Model model, HttpSession session) {
+    public String viewHomePage(Model model, HttpSession session) {
         Student student = (Student)session.getAttribute("STUDENT");
         Teacher teacher = (Teacher)session.getAttribute("TEACHER");
         if(student == null && teacher == null) {
