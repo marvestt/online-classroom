@@ -47,7 +47,7 @@
             	</p>
             </div>
          	
-			<div th:each="currentUserType : ${T(com.coolprojects.app.models.UserType).values()}">
+			<div th:each="currentUserType : ${T(com.projects.classroom.models.UserType).values()}">
 				
 				<div class="custom-control">
 					<input type="radio" th:field="*{userType}" th:value="${currentUserType}"  name="studentTeacherRadioButton">
