@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.projects.classroom.daos.AnnouncementDao;
+import com.projects.classroom.dao.AnnouncementDao;
 
 @SpringBootApplication
 public class OnlineClassroomApplication{

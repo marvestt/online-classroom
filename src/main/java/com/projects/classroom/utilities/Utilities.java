@@ -10,9 +10,9 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import com.projects.classroom.models.Classroom;
-import com.projects.classroom.models.Student;
-import com.projects.classroom.models.Teacher;
+import com.projects.classroom.model.Classroom;
+import com.projects.classroom.model.Student;
+import com.projects.classroom.model.Teacher;
 
 public class Utilities {
     
