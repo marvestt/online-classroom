@@ -34,7 +34,7 @@ Feel free to create an account and get started!
 ![](images/teacher-signup.gif)
 
 <br>
-Users can register their account as a teacher, which will give them access to classroom creation and they will be able to join other classrooms as teachers.
+Users may register their account as a teacher, which will give them access to classroom creation and they will be able to join other classrooms as teachers.
 <br>
 
 <a name="creating-classroom"/>
