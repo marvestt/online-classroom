@@ -4,7 +4,7 @@
 
 The Online Classroom Web Application allows teachers and students to create accounts, create and join classrooms, and interact in an online classroom environment. Teachers have the option of creating classrooms, posting new assignments, announcements, lessons for the class and also grading the responses that the students submit. Students are able to join classrooms by searching for them with the search bar. Once they join, they will have the option to view lessons, assignments, grades, etc.
 <br><br>
-To access the web-app, please use the link: [newclassroom.net](https://newclassroom.net)
+To access the web-app, please use the link: [~~newclassroom.net~~](https://newclassroom.net)
 <br><br>
 Feel free to create an account and get started!
 <br><br>
