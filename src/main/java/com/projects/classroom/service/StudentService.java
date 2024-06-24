@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.projects.classroom.exception.EntityNotFoundException;
 import com.projects.classroom.exception.UserAlreadyExistsException;
 import com.projects.classroom.model.Student;
+import com.projects.classroom.model.User;
 import com.projects.classroom.repository.StudentRepo;
 
 @Service
@@ -61,12 +62,7 @@ public class StudentService {
     }
 
     public Student save(@Valid Student student) {
-        boolean userExists = userService.checkUserExists(student.getUsername());
-        if(!userExists) {
-            userService.registerUser(student);
-            return studentRepo.save(student);
-        }
-        throw new UserAlreadyExistsException(student.getUsername());
+        return studentRepo.save(student);
     }
 
     public void delete(long studentId){

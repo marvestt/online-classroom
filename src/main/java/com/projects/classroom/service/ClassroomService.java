@@ -50,11 +50,7 @@ public class ClassroomService {
         searchResults.addAll(searchByNameResults);
         searchResults.addAll(searchByDescriptionResults);
         searchResults.addAll(searchByTeacherResults);
-        /*
-         * List<Classroom> mergedClassroomList =
-         * Stream.concat(searchByNameResults.stream(),searchByDescriptionResults.stream(
-         * )) .distinct() .collect(toList());
-         */
+
         return new ArrayList<>(searchResults);
     }
     

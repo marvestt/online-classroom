@@ -14,11 +14,13 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
+import org.aspectj.apache.bcel.generic.TargetLostException;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -94,12 +96,18 @@ public class ClassroomController {
         if(!checkSessionForClassroom(session)) {
             return "redirect:/home";
         }
-        Classroom classroom = classroomService.get(getClassroomIdFromSession(session));
+        try {
+            Classroom classroom = classroomService.get(getClassroomIdFromSession(session));
 
-        List<Announcement> announcements = announcementService.getAnnouncementsByClassId(classroom.getClassroomId());
-        model.addAttribute("listOfAnnouncements",announcements);
+            List<Announcement> announcements = announcementService.getAnnouncementsByClassId(classroom.getClassroomId());
+            model.addAttribute("listOfAnnouncements",announcements);
 
-        model.addAttribute("classroomName", classroom.getName());
+            model.addAttribute("classroomName", classroom.getName());
+        }
+        catch(TransactionSystemException e) {
+            model.addAttribute("errorOccured",true);
+        }
+        
         if(checkSessionForStudent(session)) {
             return "classroom-home-student";
         }
@@ -141,16 +149,23 @@ public class ClassroomController {
         else {
             return "redirect:/";
         }
-        long userId = user.getUserId();
-        Classroom classroom = classroomService.get(classroomId);
-        boolean isUserRegistered = classroomService.isUserRegisteredForClass(userId, classroomId);
-        
-        if(!isUserRegistered) {
-            classroomService.registerUserToClass(userId, classroomId);
-            attributes.addFlashAttribute("joined",true);
-        }
+        try {
+            long userId = user.getUserId();
+            Classroom classroom = classroomService.get(classroomId);
+            boolean isUserRegistered = classroomService.isUserRegisteredForClass(userId, classroomId);
+            
+            if(!isUserRegistered) {
+                classroomService.registerUserToClass(userId, classroomId);
+                attributes.addFlashAttribute("joined",true);
+            }
 
-        session.setAttribute("SELECTED_CLASS_ID", classroom.getClassroomId());
+            session.setAttribute("SELECTED_CLASS_ID", classroom.getClassroomId()); 
+        }
+        catch(TransactionSystemException e) {
+            attributes.addFlashAttribute("failedRegistration",true);
+            return "redirect:/send-join-request-" + classroomId;
+        }
+        
         return "redirect:/classroom";
     }
     
@@ -158,8 +173,14 @@ public class ClassroomController {
     public String selectClass(Model model, HttpSession session,
             @PathVariable(value = "classroomId") int classroomId) {
 
-        Classroom selectedClassroom = classroomService.get(classroomId);
-        session.setAttribute("SELECTED_CLASS_ID", selectedClassroom.getClassroomId());
+        try {
+            Classroom selectedClassroom = classroomService.get(classroomId);
+            session.setAttribute("SELECTED_CLASS_ID", selectedClassroom.getClassroomId());
+        }
+        catch(TransactionSystemException e) {
+            return "redirect:/my-classrooms";
+        }
+        
         return "redirect:/classroom";
     }
     
@@ -179,12 +200,18 @@ public class ClassroomController {
         if(!checkSessionForTeacher(session)) {
             return "redirect:/";
         }
-        Teacher teacher = teacherService.get(getTeacherIdFromSession(session));
-        classroom.setTeacher(teacher);
-        classroom = classroomService.save(classroom);
-        classroomService.registerUserToClass(teacher.getUserId(), classroom.getClassroomId());
+        try {
+            Teacher teacher = teacherService.get(getTeacherIdFromSession(session));
+            classroom.setTeacher(teacher);
+            classroom = classroomService.save(classroom);
+            classroomService.registerUserToClass(teacher.getUserId(), classroom.getClassroomId());
 
-        session.setAttribute("SELECTED_CLASS_ID", classroom.getClassroomId());
+            session.setAttribute("SELECTED_CLASS_ID", classroom.getClassroomId());
+        }catch(TransactionSystemException e) {
+            model.addAttribute("errorOccured",true);
+            return "new-classroom";
+        }
+        
         return "redirect:/classroom";   
     }
     
@@ -221,15 +248,19 @@ public class ClassroomController {
         if(!checkSessionForTeacher(session) && !checkSessionForStudent(session)) {
             return "redirect:/";
         }
-        
-        List<Classroom> classrooms = classroomService.searchClassrooms(searchText);
-        List<ClassroomButton> classroomButtons = classrooms
-                                                        .stream()
-                                                        .map(e -> classroomToClassroomButton(e))
-                                                        .collect(Collectors.toList());
-        model.addAttribute("searchText",searchText);
-        model.addAttribute("classroomButtons",classroomButtons);
-        model.addAttribute("selectedClassroom",new Classroom());
+        try {
+            List<Classroom> classrooms = classroomService.searchClassrooms(searchText);
+            List<ClassroomButton> classroomButtons = classrooms
+                                                            .stream()
+                                                            .map(e -> classroomToClassroomButton(e))
+                                                            .collect(Collectors.toList());
+            model.addAttribute("searchText",searchText);
+            model.addAttribute("classroomButtons",classroomButtons);
+            model.addAttribute("selectedClassroom",new Classroom());
+        }catch(TransactionSystemException e) {
+            model.addAttribute("errorOccured",true);
+        }
+
         if(checkSessionForStudent(session)) {
             return "classroom-search-student";
         }

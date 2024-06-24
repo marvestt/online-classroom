@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -48,18 +49,26 @@ public class GradesController {
     
     @GetMapping("grades")
     public String viewGradesPage(Model model, HttpSession session) {
-        if(checkSessionForStudent(session)) {
-            Student student = studentService.get(getStudentIdFromSession(session));
-            List<Submission> submissions = submissionService.getSubmissionsByStudentId(student.getStudentId());
-            model.addAttribute("listOfSubmissions",submissions);
 
+        if(checkSessionForStudent(session)) {
+            try {
+                Student student = studentService.get(getStudentIdFromSession(session));
+                List<Submission> submissions = submissionService.getSubmissionsByStudentId(student.getStudentId());
+                model.addAttribute("listOfSubmissions",submissions);
+            }
+            catch(TransactionSystemException e) {
+                model.addAttribute("errorOccured",true);
+            }
             return "grades-student";
         }
         else if(checkSessionForTeacher(session) && checkSessionForClassroom(session)) {
-            Classroom classroom = classroomService.get(getClassroomIdFromSession(session));
-            List<Assignment> assignments = assignmentService.getAssignementsByClassroomId(classroom.getClassroomId());
-            model.addAttribute("listOfAssignments",assignments);
-
+            try {
+                Classroom classroom = classroomService.get(getClassroomIdFromSession(session));
+                List<Assignment> assignments = assignmentService.getAssignementsByClassroomId(classroom.getClassroomId());
+                model.addAttribute("listOfAssignments",assignments);
+            }catch(TransactionSystemException e) {
+                model.addAttribute("errorOccured",true);
+            }
             return "grades-teacher";
         }
         return "redirect:/";
@@ -71,14 +80,16 @@ public class GradesController {
             @PathVariable(value="assignmentId") long assignmentId,
             @ModelAttribute(value="grade") String grade,
             RedirectAttributes attributes) {
-        
-        Submission submission = submissionService.getSubmissionByAssignmentIdAndStudentId(studentId, assignmentId);
-        submission.setGrade(grade);
-        submission.setGraded(true);
-        
-        submissionService.save(submission);
-        attributes.addFlashAttribute("gradeSubmitted",true);
-    
+        try {
+            Submission submission = submissionService.getSubmissionByAssignmentIdAndStudentId(studentId, assignmentId);
+            submission.setGrade(grade);
+            submission.setGraded(true);
+            
+            submissionService.save(submission);
+            attributes.addFlashAttribute("gradeSubmitted",true);
+        }catch(TransactionSystemException e) {
+            model.addAttribute("errorOccured", true);
+        }
         return String.format("redirect:/view-submission-%d-%d",assignmentId,studentId);
     }
     
@@ -86,12 +97,16 @@ public class GradesController {
     public String viewGradesForAssignment(Model model,
             @PathVariable(value="assignmentId") long assignmentId) {
 
-        Assignment assignment = assignmentService.get(assignmentId);
-        List<Submission> submissions = submissionService.getSubmissionsByAssignmentId(assignmentId);
+        try {
+            Assignment assignment = assignmentService.get(assignmentId);
+            List<Submission> submissions = submissionService.getSubmissionsByAssignmentId(assignmentId);
+            
+            model.addAttribute("assignment",assignment);
+            model.addAttribute("listOfSubmissions",submissions);
+        }catch(TransactionSystemException e) {
+            model.addAttribute("errorOccured",true);
+        }
         
-        model.addAttribute("assignment",assignment);
-        model.addAttribute("listOfSubmissions",submissions);
-
         return "grades-by-assignment";
     }
     

@@ -1,5 +1,8 @@
 package com.projects.classroom.exception;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserAlreadyExistsException  extends RuntimeException{
 
     private static final String GENERIC_ERROR_MESSAGE = "The user already exists and therefore cannot be created";
@@ -11,5 +14,9 @@ public class UserAlreadyExistsException  extends RuntimeException{
     
     public UserAlreadyExistsException(String message) {
         super(USER_ALREADY_FOUND_MESSAGE + message);
+    }
+    
+    public List<String> getValidationMessages(){
+        return List.of(GENERIC_ERROR_MESSAGE);
     }
 }

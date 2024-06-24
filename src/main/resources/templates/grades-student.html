@@ -34,6 +34,9 @@
 					</tbody>
 				</table>
 			</div>	
+			<div th:if="${errorOccured}">
+     			<p  class="mt-4">Something went wrong with loading the submissions table. Please try again at a later time</p>
+     		</div>
 		</div>
 	</main>
 	

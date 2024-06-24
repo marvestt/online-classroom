@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -47,8 +48,12 @@ public class SubmissionsController {
         if(!checkSessionForStudent(session)) {
             return "redirect:/";
         }
-        Assignment assignment = assignmentService.get(assignmentId);
-        model.addAttribute("assignment",assignment);
+        try {
+            Assignment assignment = assignmentService.get(assignmentId);
+            model.addAttribute("assignment",assignment);
+        }catch(TransactionSystemException e) {
+            model.addAttribute("errorOccured",true);
+        }
         
         return "submit-assignment";
     }
@@ -63,21 +68,35 @@ public class SubmissionsController {
         if(!checkSessionForStudent(session)) {
             return "redirect:/";
         }
-        Student student = studentService.get(getStudentIdFromSession(session)); 
-        Assignment assignment = assignmentService.get(assignmentId);
-        Submission submission = new Submission();
+        try {
+            Student student = studentService.get(getStudentIdFromSession(session)); 
+            Assignment assignment = assignmentService.get(assignmentId);
+            Submission submission = new Submission();
+            
+            submission.setAssignment(assignment);
+            submission.setStudent(student);
+            submission.setTitle(title);
+            submission.setText(content);
+            
+            boolean submissionExists = submissionService.checkSubmissionExists(student.getStudentId(), assignmentId); 
+            if(submissionExists) {
+                Submission previouSubmission = submissionService.getSubmissionByAssignmentIdAndStudentId(student.getStudentId(),assignmentId);
+                if(previouSubmission.isGraded()) {
+                    model.addAttribute("graded", true);
+                    model.addAttribute("assignment",assignment);
+                    return "submit-assignment";
+                }
+                else {
+                    submissionService.delete(previouSubmission.getSubmissionId());
+                }
+            }   
+            submissionService.save(submission);
+        }catch(TransactionSystemException e) {
+            attributes.addFlashAttribute("errorOccured",true);
+            return "redirect:/submit-"+assignmentId;
+        }
         
-        submission.setAssignment(assignment);
-        submission.setStudent(student);
-        submission.setTitle(title);
-        submission.setText(content);
-        
-        Submission previouSubmission = submissionService.getSubmissionByAssignmentIdAndStudentId(student.getStudentId(),assignmentId);
-        submissionService.delete(previouSubmission.getSubmissionId());
-        submissionService.save(submission);
-
         attributes.addFlashAttribute("submitted",true);
-        
         return "redirect:/submit-"+assignmentId;
     }
     
@@ -88,14 +107,17 @@ public class SubmissionsController {
         if(!checkSessionForTeacher(session)) {
             return "redirect:/";
         }
-
-        List<Submission> submissions = submissionService.getSubmissionsByAssignmentId(assignmentId);
-        List<Student> studentsWithSubmissions = submissions.stream()
-                                                           .map(Submission::getStudent)
-                                                           .collect(Collectors.toList());
-        model.addAttribute("listOfStudents",studentsWithSubmissions);
-        model.addAttribute("assignmentId",assignmentId);
-      
+        try {
+            List<Submission> submissions = submissionService.getSubmissionsByAssignmentId(assignmentId);
+            List<Student> studentsWithSubmissions = submissions.stream()
+                                                               .map(Submission::getStudent)
+                                                               .collect(Collectors.toList());
+            model.addAttribute("listOfStudents",studentsWithSubmissions);
+            model.addAttribute("assignmentId",assignmentId);
+        }catch(TransactionSystemException e) {
+            model.addAttribute("errorOccured",true);
+        }
+        
         return "view-submissions";
     }
     
@@ -107,12 +129,19 @@ public class SubmissionsController {
             return"redirect:/";
         }
 
-        Submission submission = submissionService.getSubmissionByAssignmentIdAndStudentId(studentId, assignmentId);
-        Assignment assignment = assignmentService.get(assignmentId);
-        Student student = studentService.get(studentId);
-        model.addAttribute("submission",submission);
-        model.addAttribute("assignment",assignment);
-        model.addAttribute("student",student);
+        try {
+            Submission submission = submissionService.getSubmissionByAssignmentIdAndStudentId(studentId, assignmentId);
+            Assignment assignment = assignmentService.get(assignmentId);
+            Student student = studentService.get(studentId);
+            model.addAttribute("submission",submission);
+            model.addAttribute("assignment",assignment);
+            model.addAttribute("student",student);
+        }catch(TransactionSystemException e) {
+            model.addAttribute("errorOccured",true);
+            return "redirect:/view-submissions-"+assignmentId;
+        }
+
+        
         return "view-submission";
     }
 }

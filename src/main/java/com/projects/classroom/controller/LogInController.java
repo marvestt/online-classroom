@@ -1,5 +1,6 @@
 package com.projects.classroom.controller;
 
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -69,6 +70,7 @@ public class LogInController {
             return "redirect:/home";
         }
         
+        attributes.addFlashAttribute("validationMessages",List.of("User credentials are incorrect. Please try again"));
         return "redirect:/";
     }
     

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -36,10 +37,14 @@ public class LessonController {
         if(!checkSessionForClassroom(session)) {
             return "redirect:/home";
         }
-        Classroom classroom = classroomService.get(getClassroomIdFromSession(session));
+        try {
+            Classroom classroom = classroomService.get(getClassroomIdFromSession(session));
 
-        List<Lesson> lessons = lessonService.getLessonsByClassId(classroom.getClassroomId());
-        model.addAttribute("listOfLessons", lessons);
+            List<Lesson> lessons = lessonService.getLessonsByClassId(classroom.getClassroomId());
+            model.addAttribute("listOfLessons", lessons);
+        }catch(TransactionSystemException e) {
+            model.addAttribute("errorOccured",true);
+        }
         
         if(checkSessionForStudent(session)) {
             return "lessons-student";
@@ -62,15 +67,22 @@ public class LessonController {
         else if(!checkSessionForClassroom(session)) {
             return "redirect:/home";
         }
-        Classroom classroom = classroomService.get(getClassroomIdFromSession(session));
-        Lesson lesson = new Lesson();
-        lesson.setClassroom(classroom);
-        lesson.setTitle(title);
-        lesson.setText(content);
-        classroom.getLessons().add(lesson);
         
-        lessonService.save(lesson);
-        classroomService.save(classroom);
+        try {
+            Classroom classroom = classroomService.get(getClassroomIdFromSession(session));
+            Lesson lesson = new Lesson();
+            lesson.setClassroom(classroom);
+            lesson.setTitle(title);
+            lesson.setText(content);
+            classroom.getLessons().add(lesson);
+            
+            lessonService.save(lesson);
+            classroomService.save(classroom);
+        }catch(TransactionSystemException e) {
+            attributes.addFlashAttribute("errorOccured",true);
+            return "redirect:/write-post-lesson";
+        }
+
             
         return "redirect:/lessons";
     }

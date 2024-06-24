@@ -4,11 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
+import javax.validation.executable.ValidateOnExecution;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import com.projects.classroom.exception.EntityNotFoundException;
+import com.projects.classroom.exception.UserAlreadyExistsException;
 import com.projects.classroom.model.User;
 import com.projects.classroom.repository.UserRepo;
 
@@ -55,10 +58,14 @@ public class UserService {
     }
     
     public void registerUser(@Valid User user) {
-        String rawPassword = user.getPassword();
-        String encodedPassword = passwordEncryptionService.encryptPassword(rawPassword);
-        user.setPassword(encodedPassword);
-        userRepo.save(user);
+        boolean userExists = checkUserExists(user.getUsername());
+        if(!userExists) {
+            String rawPassword = user.getPassword();
+            String encodedPassword = passwordEncryptionService.encryptPassword(rawPassword);
+            user.setPassword(encodedPassword);
+            userRepo.save(user);
+        }
+        throw new UserAlreadyExistsException(user.getUsername());
     }
     
     public User save(@Valid User user) {

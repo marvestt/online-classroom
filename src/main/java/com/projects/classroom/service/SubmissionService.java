@@ -41,6 +41,10 @@ public class SubmissionService {
         return submissions;
     }
     
+    public boolean checkSubmissionExists(long studentId, long assignmentId) {
+        return submissionRepo.findByAssignmentIdAndStudentId(assignmentId, studentId).isPresent();
+    }
+    
     public Submission getSubmissionByAssignmentIdAndStudentId(long studentId, long assignmentId) {
         Optional<Submission> subOpt = submissionRepo.findByAssignmentIdAndStudentId(assignmentId, studentId);
         if(subOpt.isPresent()) {

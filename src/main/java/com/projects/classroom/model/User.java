@@ -1,6 +1,7 @@
 package com.projects.classroom.model;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 
@@ -14,9 +15,11 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -28,20 +31,24 @@ public class User {
     @PositiveOrZero
 	private long id;
     
-    @NotNull
-    @NotBlank
+    @NotNull(message = "Username must me provided")
+    @NotBlank(message = "Username cannot be blank")
+    @Size(min = 4, max = 15, message = "Username must be between 4-15 characters")
 	private String username;
     
-    @NotNull
-    @NotBlank
+    @NotNull(message = "Password must be provided")
+    @NotBlank(message = "Password cannot be blank")
+    @Size(min = 5, message = "Password must be at least 5 characters long")
 	private String password;
     
-    @NotNull
-    @NotBlank
+    @NotNull(message = "First Name must be provided")
+    @NotBlank(message = "First Name cannot be blank")
+    @Size(min = 2, message = "First Name must be at least 2 characters long")
 	private String firstName;
     
-    @NotNull
-    @NotBlank
+    @NotNull(message = "Last Name must be provided")
+    @NotBlank(message = "Last Name cannot be blank")
+    @Size(min = 2, message = "Last Name must be at least 2 characters long")
 	private String surname;
     
     @ManyToMany

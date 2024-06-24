@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -37,9 +38,14 @@ public class AssignmentController {
         if(!checkSessionForClassroom(session)) {
             return "redirect:/home";
         }
-        Classroom classroom = classroomService.get(getClassroomIdFromSession(session));
-        List<Assignment> assignments = assignmentService.getAssignementsByClassroomId(classroom.getClassroomId());
-        model.addAttribute("listOfAssignments",assignments);
+        try {
+            Classroom classroom = classroomService.get(getClassroomIdFromSession(session));
+            List<Assignment> assignments = assignmentService.getAssignementsByClassroomId(classroom.getClassroomId());
+            model.addAttribute("listOfAssignments",assignments);
+        }
+        catch(TransactionSystemException e) {
+            model.addAttribute("errorOccured",true);
+        }
         
         if(checkSessionForStudent(session)) {
             return "assignments-student";
@@ -68,7 +74,14 @@ public class AssignmentController {
         assignment.setTitle(title);
         assignment.setDescription(content);
         
-        assignmentService.save(assignment);
+        try {
+            assignmentService.save(assignment);
+        }
+        catch(TransactionSystemException e) {
+            attributes.addFlashAttribute("errorOccured",true);
+            return "redirect:/write-post-assignment";
+        }
+        
         return "redirect:/assignments";
     }
 }

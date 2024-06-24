@@ -61,12 +61,7 @@ public class TeacherService {
     }
 
     public Teacher save(@Valid Teacher teacher) {
-        boolean userExists = userService.checkUserExists(teacher.getUsername());
-        if(!userExists) {
-            userService.registerUser(teacher);
-            return teacherRepo.save(teacher);
-        }
-        throw new UserAlreadyExistsException(teacher.getUsername());
+        return teacherRepo.save(teacher);
     }
 
 

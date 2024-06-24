@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,20 +53,24 @@ public class MembersController {
         if(!checkSessionForClassroom(session)) {
             return "redirect:/home";
         }
-        Classroom classroom = classroomService.get(getClassroomIdFromSession(session));
+        try {
+            Classroom classroom = classroomService.get(getClassroomIdFromSession(session));
 
-        Teacher headTeacher = classroom.getTeacher();
-        List<User> users = classroom.getUsers();
-        List<User> students  = users.stream()
-                                    .filter(e -> studentService.checkStudentExists(e.getUsername()))
-                                    .collect(Collectors.toList());
-        List<User> teachers = users.stream()
-                                   .filter(e -> teacherService.checkTeacherExists(e.getUsername()) && e.getUserId() != headTeacher.getUserId())
-                                   .collect(Collectors.toList());
-        
-        model.addAttribute("listOfStudents",students);
-        model.addAttribute("listOfTeachers",teachers);
-        model.addAttribute("headTeacher", headTeacher);
+            Teacher headTeacher = classroom.getTeacher();
+            List<User> users = classroom.getUsers();
+            List<User> students  = users.stream()
+                                        .filter(e -> studentService.checkStudentExists(e.getUsername()))
+                                        .collect(Collectors.toList());
+            List<User> teachers = users.stream()
+                                       .filter(e -> teacherService.checkTeacherExists(e.getUsername()) && e.getUserId() != headTeacher.getUserId())
+                                       .collect(Collectors.toList());
+            
+            model.addAttribute("listOfStudents",students);
+            model.addAttribute("listOfTeachers",teachers);
+            model.addAttribute("headTeacher", headTeacher);
+        }catch(TransactionSystemException e) {
+            model.addAttribute("errorOccured",true);
+        }
         
         if(checkSessionForStudent(session)) {
             return "members-student";
@@ -82,13 +87,18 @@ public class MembersController {
         if(!checkSessionForClassroom(session)) {
             return "redirect:/home";
         }
-        Classroom classroom = classroomService.get(getClassroomIdFromSession(session));
+        try {
+            Classroom classroom = classroomService.get(getClassroomIdFromSession(session));
 
-        long studentId = studentService.getStudentByUserId(userId).getStudentId();
-        List<Submission> submissions = submissionService.getSubmissionsByStudentId(studentId);
-        submissions.forEach(e -> submissionService.delete(e.getSubmissionId()));
+            long studentId = studentService.getStudentByUserId(userId).getStudentId();
+            List<Submission> submissions = submissionService.getSubmissionsByStudentId(studentId);
+            submissions.forEach(e -> submissionService.delete(e.getSubmissionId()));
+            
+            classroomService.removeUser(classroom.getClassroomId(), userId);
+        }catch(TransactionSystemException e) {
+            model.addAttribute("errorOccured",true);
+        }
         
-        classroomService.removeUser(classroom.getClassroomId(), userId);
         return "redirect:/members";
     }
 }

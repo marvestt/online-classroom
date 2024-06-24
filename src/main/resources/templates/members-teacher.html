@@ -49,7 +49,10 @@
 						
 					</tbody>
 				</table>
-			</div>	
+			</div>
+			<div th:if="${errorOccured}">
+     			<p  class="mt-4">Something went wrong with the assignment or submission. Please make sure to enter a valid input</p>
+     		</div>	
 		</div>
 	</main>
 
