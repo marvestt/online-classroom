@@ -27,9 +27,9 @@
             <artifactId>spring-security-core</artifactId>
         </dependency>
 		<dependency>
-		    <groupId>org.hibernate.validator</groupId>
-		    <artifactId>hibernate-validator</artifactId>
-		    </dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
 		<dependency>
 	      <groupId>org.springframework.boot</groupId>
 	      <artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -50,15 +50,17 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+		
+   		<dependency>
+		    <groupId>org.mariadb.jdbc</groupId>
+		    <artifactId>mariadb-java-client</artifactId>
+	    </dependency>
+	    
 		<dependency>
-		    <groupId>org.postgresql</groupId>
-		    <artifactId>postgresql</artifactId>
-		    <scope>runtime</scope>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		<dependency>
-		    <groupId>org.springframework.boot</groupId>
-		    <artifactId>spring-boot-starter-jdbc</artifactId>
-		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

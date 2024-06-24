@@ -60,24 +60,24 @@ public class Utilities {
     
     public static boolean checkSessionForTeacher(HttpSession session) {
         try{
-            return (Teacher) session.getAttribute("TEACHER") != null;
+            return (Long) session.getAttribute("TEACHER_ID") != null;
         }
         catch(ClassCastException e) {
         }
         return false;
     }
     
-    public static Teacher getTeacherFromSession(HttpSession session) {
-        return (Teacher)session.getAttribute("TEACHER");
+    public static Long getTeacherIdFromSession(HttpSession session) {
+        return (Long)session.getAttribute("TEACHER_ID");
     }
     
-    public static Student getStudentFromSession(HttpSession session) {
-        return (Student) session.getAttribute("STUDENT");
+    public static Long getStudentIdFromSession(HttpSession session) {
+        return (Long) session.getAttribute("STUDENT_ID");
     }
     
     public static boolean checkSessionForStudent(HttpSession session) {
         try{
-            return (Student) session.getAttribute("STUDENT") != null;
+            return (Long) session.getAttribute("STUDENT_ID") != null;
         }
         catch(ClassCastException e) {
         }
@@ -86,15 +86,15 @@ public class Utilities {
     
     public static boolean checkSessionForClassroom(HttpSession session) {
         try{
-            return (Classroom) session.getAttribute("SELECTED_CLASS") != null;
+            return (Long) session.getAttribute("SELECTED_CLASS_ID") != null;
         }
         catch(ClassCastException e) {
         }
         return false;
     }
     
-    public static Classroom getClassroomFromSession(HttpSession session) {
-        return (Classroom) session.getAttribute("SELECTED_CLASS");
+    public static Long getClassroomIdFromSession(HttpSession session) {
+        return (Long) session.getAttribute("SELECTED_CLASS_ID");
     }
     
 }

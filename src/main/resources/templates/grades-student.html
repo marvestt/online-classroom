@@ -27,9 +27,9 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="grade : ${listOfGrades}">
-							<td scope="row" th:text="${assignmentIdToAssignment.get(grade.getAssignmentId()).getTitle()}"> Assignment</td>
-							<td th:text="${grade.getGrade()}"> </td>
+						<tr th:each="submission : ${listOfSubmissions}">
+							<td scope="row" th:text="${submission.getAssignment().getTitle()}"> Assignment</td>
+							<td th:text="${submission.getGrade()}"> </td>
 						</tr>
 					</tbody>
 				</table>

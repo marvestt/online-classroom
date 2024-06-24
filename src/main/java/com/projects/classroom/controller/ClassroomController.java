@@ -3,16 +3,18 @@ package com.projects.classroom.controller;
 import static com.projects.classroom.utilities.Utilities.checkSessionForClassroom;
 import static com.projects.classroom.utilities.Utilities.checkSessionForStudent;
 import static com.projects.classroom.utilities.Utilities.checkSessionForTeacher;
-import static com.projects.classroom.utilities.Utilities.getClassroomFromSession;
-import static com.projects.classroom.utilities.Utilities.getStudentFromSession;
-import static com.projects.classroom.utilities.Utilities.getTeacherFromSession;
+import static com.projects.classroom.utilities.Utilities.getClassroomIdFromSession;
+import static com.projects.classroom.utilities.Utilities.getStudentIdFromSession;
+import static com.projects.classroom.utilities.Utilities.getTeacherIdFromSession;
 
 import java.io.InvalidObjectException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +34,18 @@ import com.projects.classroom.model.Teacher;
 import com.projects.classroom.model.User;
 import com.projects.classroom.service.AnnouncementService;
 import com.projects.classroom.service.ClassroomService;
+import com.projects.classroom.service.StudentService;
 import com.projects.classroom.service.TeacherService;
+import com.projects.classroom.service.UserService;
 
 @Controller
 public class ClassroomController {
+    
+    @Autowired
+    UserService userService;
+    
+    @Autowired
+    StudentService studentService;
     
     @Autowired
     ClassroomService classroomService;
@@ -45,8 +55,6 @@ public class ClassroomController {
     
     @Autowired
     AnnouncementService announcementService;
-    
-    private static final Logger logger = LoggerFactory.getLogger(ClassroomController.class);
     
     @GetMapping(value = "write-post-{postType}")
     public String showCreatePostPage(Model model, HttpSession session,
@@ -86,16 +94,12 @@ public class ClassroomController {
         if(!checkSessionForClassroom(session)) {
             return "redirect:/home";
         }
-        Classroom classroom = getClassroomFromSession(session);
-        String classroomName = classroom.getName();
-        try {
-            List<Announcement> announcements = announcementService.getAnnouncementsByClassId(classroom.getClassId());
-            model.addAttribute("listOfAnnouncements",announcements);
-        } catch (InvalidObjectException | DatabaseOperationException e) {
-            logger.error(e.toString());
-            model.addAttribute("errorOccured",true);
-        }
-        model.addAttribute("classroomName", classroomName);
+        Classroom classroom = classroomService.get(getClassroomIdFromSession(session));
+
+        List<Announcement> announcements = announcementService.getAnnouncementsByClassId(classroom.getClassroomId());
+        model.addAttribute("listOfAnnouncements",announcements);
+
+        model.addAttribute("classroomName", classroom.getName());
         if(checkSessionForStudent(session)) {
             return "classroom-home-student";
         }
@@ -109,14 +113,10 @@ public class ClassroomController {
     public String classroomJoin(Model model, HttpSession session,
             @PathVariable("classroomId") int id
             ) {
-        String className = "";
-        try {
-            className = classroomService.get(id).getName();
-        } catch (InvalidObjectException | DatabaseOperationException e) {
-            logger.error(e.toString());
-        } 
+        
+        Classroom classroom = classroomService.get(id);
         model.addAttribute("classroomId",id);
-        model.addAttribute("className", className);
+        model.addAttribute("className", classroom.getName());
 
         if(checkSessionForStudent(session)) {
             return "join-classroom-student";
@@ -133,45 +133,34 @@ public class ClassroomController {
             RedirectAttributes attributes) {
         User user;
         if(checkSessionForStudent(session)) {
-            user = getStudentFromSession(session);
+            user = studentService.get(getStudentIdFromSession(session));
         }
         else if(checkSessionForTeacher(session)) {
-            user = getTeacherFromSession(session);
+            user = teacherService.get(getTeacherIdFromSession(session));
         }
         else {
             return "redirect:/";
         }
         long userId = user.getUserId();
-        boolean userIsRegistered = classroomService.getClassroomsByUserId(userId)
-                                                    .stream()
-                                                    .map(e -> e.getClassId())
-                                                    .collect(Collectors.toList())
-                                                    .contains((long)classroomId);
-        if(!userIsRegistered) {
-            classroomService.registerUserInClassroom(userId, classroomId);
+        Classroom classroom = classroomService.get(classroomId);
+        boolean isUserRegistered = classroomService.isUserRegisteredForClass(userId, classroomId);
+        
+        if(!isUserRegistered) {
+            classroomService.registerUserToClass(userId, classroomId);
             attributes.addFlashAttribute("joined",true);
         }
-        try {
-            session.setAttribute("SELECTED_CLASS", classroomService.get(classroomId));
-            return "redirect:/classroom";
-        } catch (InvalidObjectException | DatabaseOperationException e1) {
-            logger.error(e1.toString());
-        }
-        attributes.addFlashAttribute("failedRegistration",true);
-        return "redirect:/send-join-request-" + classroomId;
+
+        session.setAttribute("SELECTED_CLASS_ID", classroom.getClassroomId());
+        return "redirect:/classroom";
     }
     
     @GetMapping(value="select-class-{classroomId}")
     public String selectClass(Model model, HttpSession session,
             @PathVariable(value = "classroomId") int classroomId) {
-        try {
-            Classroom selectedClassroom = classroomService.get(classroomId);
-            session.setAttribute("SELECTED_CLASS", selectedClassroom);
-            return "redirect:/classroom";
-        } catch (InvalidObjectException | DatabaseOperationException e1) {
-            logger.error(e1.toString());
-        }
-        return "redirect:/my-classrooms";
+
+        Classroom selectedClassroom = classroomService.get(classroomId);
+        session.setAttribute("SELECTED_CLASS_ID", selectedClassroom.getClassroomId());
+        return "redirect:/classroom";
     }
     
     @GetMapping(value = "new-classroom")
@@ -190,18 +179,13 @@ public class ClassroomController {
         if(!checkSessionForTeacher(session)) {
             return "redirect:/";
         }
-        Teacher teacher = getTeacherFromSession(session);
-        classroom.setMainTeacherId(teacher.getTeacherId());
-        int classId = classroomService.save(classroom);
-        classroomService.registerUserInClassroom(teacher.getUserId(), classId);
-        try {
-            session.setAttribute("SELECTED_CLASS", classroomService.get(classId));
-            return "redirect:/classroom";
-        } catch (InvalidObjectException | DatabaseOperationException e1) {
-            logger.error(e1.toString());
-        }
-        model.addAttribute("errorOccured",true);
-        return "new-classroom";
+        Teacher teacher = teacherService.get(getTeacherIdFromSession(session));
+        classroom.setTeacher(teacher);
+        classroom = classroomService.save(classroom);
+        classroomService.registerUserToClass(teacher.getUserId(), classroom.getClassroomId());
+
+        session.setAttribute("SELECTED_CLASS_ID", classroom.getClassroomId());
+        return "redirect:/classroom";   
     }
     
 
@@ -212,17 +196,18 @@ public class ClassroomController {
             return "redirect:/";
         }
         else if(checkSessionForTeacher(session)) {
-            user = getTeacherFromSession(session);
+            user = userService.get(getTeacherIdFromSession(session));
         }
         else {
-            user = getStudentFromSession(session);
+            user = userService.get(getStudentIdFromSession(session));
         }
-        List<Classroom> classrooms = classroomService.getClassroomsByUserId(user.getUserId());
-        List<ClassroomButton> classroomButtons = classrooms
-                                                            .stream()
-                                                            .map(e -> classroomToClassroomButton(e))
-                                                            .filter(e -> e!=null)
-                                                            .collect(Collectors.toList());
+        
+        List<Classroom> classrooms = user.getClassrooms();
+        
+        List<ClassroomButton> classroomButtons = new ArrayList<>();
+        for(Classroom classroom : classrooms) {
+            classroomButtons.add(classroomToClassroomButton(classroom));
+        }
         model.addAttribute("classroomButtons",classroomButtons);
         if(checkSessionForStudent(session)) {
             return "my-classrooms-student";
@@ -241,7 +226,6 @@ public class ClassroomController {
         List<ClassroomButton> classroomButtons = classrooms
                                                         .stream()
                                                         .map(e -> classroomToClassroomButton(e))
-                                                        .filter(e -> e!=null)
                                                         .collect(Collectors.toList());
         model.addAttribute("searchText",searchText);
         model.addAttribute("classroomButtons",classroomButtons);
@@ -253,10 +237,7 @@ public class ClassroomController {
     }
     
     private ClassroomButton classroomToClassroomButton(Classroom classroom) {
-        try{
-            return new ClassroomButton(classroom,teacherService.get(classroom.getMainTeacherId()).getProfessionalName());
-        } 
-        catch(InvalidObjectException ex) {return null;}
+        return new ClassroomButton(classroom,classroom.getTeacher().getProfessionalName());
     }
     
 

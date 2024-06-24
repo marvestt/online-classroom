@@ -1,7 +1,5 @@
 package com.projects.classroom.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -18,13 +16,9 @@ import com.projects.classroom.model.Teacher;
 import com.projects.classroom.model.User;
 import com.projects.classroom.service.StudentService;
 import com.projects.classroom.service.TeacherService;
-import com.projects.classroom.service.UserLogInService;
 
 @Controller
 public class LogInController {
-    
-    @Autowired
-    private UserLogInService userLogInService;
     
     @Autowired
     private StudentService studentService;
@@ -43,12 +37,12 @@ public class LogInController {
     
     @GetMapping(value = "/home")
     public String viewHomePage(Model model, HttpSession session) {
-        Student student = (Student)session.getAttribute("STUDENT");
-        Teacher teacher = (Teacher)session.getAttribute("TEACHER");
-        if(student == null && teacher == null) {
+        Long studentId = (Long)session.getAttribute("STUDENT_ID");
+        Long teacherId = (Long)session.getAttribute("TEACHER_ID");
+        if(studentId == null && teacherId == null) {
             return "redirect:/";
         }
-        else if(student != null) {
+        else if(studentId != null) {
             return "home-student";
         }
         else {
@@ -59,25 +53,19 @@ public class LogInController {
     @PostMapping(value = "/login")
     public String attemptLogin(@ModelAttribute("user") User user, Model model,
                                 RedirectAttributes attributes, HttpServletRequest request) {
-        List<String> validationMessages = userLogInService.validateUser(user);
-        
-        if(!validationMessages.isEmpty()) {
-            attributes.addFlashAttribute("validationMessages",validationMessages);
-            return "redirect:/";
-        }
         
         String username = user.getUsername();
         request.getSession().invalidate();
         if(studentService.checkStudentExists(username)) {
             Student student = studentService.getStudentByUsername(username);
             attributes.addFlashAttribute("student",student);
-            request.getSession().setAttribute("STUDENT", student);
+            request.getSession().setAttribute("STUDENT_ID", student.getUserId());
             return "redirect:/home";
         }
         else if(teacherService.checkTeacherExists(username)) {
             Teacher teacher = teacherService.getTeacherByUsername(username);
             attributes.addFlashAttribute("teacher",teacher);
-            request.getSession().setAttribute("TEACHER", teacher);
+            request.getSession().setAttribute("TEACHER_ID", teacher.getUserId());
             return "redirect:/home";
         }
         

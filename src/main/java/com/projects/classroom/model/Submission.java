@@ -1,53 +1,72 @@
 package com.projects.classroom.model;
 
+import javax.persistence.Column;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 
+@Entity
 public class Submission {
 	
-    @PositiveOrZero(message = "submissioId cannot be less than 0")
-	private long submissionId;
+    @Id
+    @Column(name = "submission_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+	private long id;
     
-    @PositiveOrZero(message = "assignmentId cannot be less than 0")
-	private long assignmentId;
+    @ManyToOne
+    @JoinColumn(name = "assignment_id")
+	private Assignment assignment;
     
-    @PositiveOrZero(message = "studentId cannot be less than 0")
-	private long studentId;
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+	private Student student;
     
-    @NotNull(message = "title cannot be null")
-    @NotBlank(message = "title cannot be blank")
+    @NotNull
+    @NotBlank
 	private String title;
     
-    @NotNull(message = "text cannot be null")
-    @NotBlank(message = "text cannot be blank")
+    @NotNull
+    @NotBlank
+    @Lob
 	private String text;
+    
+    private String grade;
+    
+    private boolean graded;
 
 	public long getSubmissionId() {
-		return submissionId;
+		return id;
 	}
 
 	public void setSubmissionId(long submissionId) {
-		this.submissionId = submissionId;
+		this.id = submissionId;
 	}
+	
+	public Assignment getAssignment() {
+        return assignment;
+    }
 
-	public long getAssignmentId() {
-		return assignmentId;
-	}
+    public void setAssignment(Assignment assignment) {
+        this.assignment = assignment;
+    }
 
-	public void setAssignmentId(long assignmentId) {
-		this.assignmentId = assignmentId;
-	}
+	public Student getStudent() {
+        return student;
+    }
 
-	public long getStudentId() {
-		return studentId;
-	}
+    public void setStudent(Student student) {
+        this.student = student;
+    }
 
-	public void setStudentId(long studentId) {
-		this.studentId = studentId;
-	}
-
-	public String getTitle() {
+    public String getTitle() {
 		return title;
 	}
 
@@ -62,11 +81,27 @@ public class Submission {
 	public void setText(String text) {
 		this.text = text;
 	}
-	
-	@Override
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public boolean isGraded() {
+        return graded;
+    }
+
+    public void setGraded(boolean graded) {
+        this.graded = graded;
+    }
+
+    @Override
 	public String toString() {
-		return String.format("Submission[submission_id=%d, assignment_id=%d, student_id=%d, title=%s, text=%s]", 
-				submissionId, assignmentId, studentId, title, text);
+		return String.format("Submission[submission_id=%d, assignment_id=%d, student_id=%d, title=%s, text=%s, grade=%d]", 
+				id, assignment.getAssignmentId(), student.getStudentId(), title, text, grade);
 	}
 	
 	

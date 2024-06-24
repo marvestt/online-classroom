@@ -1,23 +1,47 @@
 package com.projects.classroom.model;
 
-import javax.validation.constraints.PositiveOrZero;
+import java.util.ArrayList;
+import java.util.List;
 
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Lob;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.Size;
+
+@Entity
 public class Student extends User{
-	
-    @PositiveOrZero(message = "studentId cannot be less than 0")
-	private long studentId;
+    
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private List <Submission> submissions;
+    
+    @Lob
 	private String description;
 	private String goals;
 
+	public Student() {
+	    submissions = new ArrayList<>();
+	}
+	
 	public long getStudentId() {
-		return studentId;
+		return getUserId();
 	}
 
 	public void setStudentId(long studentId) {
-		this.studentId = studentId;
+		setUserId(studentId);
 	}
+    
+    public List<Submission> getSubmissions() {
+        return submissions;
+    }
 
-	public String getDescription() {
+    public void setSubmissions(List<Submission> submissions) {
+        this.submissions = submissions;
+    }
+
+    public String getDescription() {
 		return description;
 	}
 
@@ -36,7 +60,7 @@ public class Student extends User{
 	@Override
 	public String toString() {
 		return String.format("Student[student_id=%d, description=%s, goals=%s]", 
-				studentId, description, goals);
+				getUserId(), description, goals);
 	}
 	
 }

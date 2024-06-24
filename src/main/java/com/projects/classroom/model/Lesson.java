@@ -1,42 +1,56 @@
 package com.projects.classroom.model;
 
+import javax.persistence.Column;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 
+@Entity
 public class Lesson {
 	
-    @PositiveOrZero(message = "lessonId cannot be less than 0")
-	private long lessonId;
+    @Id
+    @Column(name = "lesson_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @PositiveOrZero
+	private long id;
     
-    @PositiveOrZero(message = "classId cannot be less than 0")
-	private long classId;
+    @ManyToOne
+    @JoinColumn(name = "class_id")
+	private Classroom classroom;
     
-    @NotNull(message = "title cannot be null")
-    @NotBlank(message = "title cannot be blank")
+    @NotNull
+    @NotBlank
 	private String title;
     
-    @NotNull(message = "text cannot be null")
-    @NotBlank(message = "text cannot be blank")
+    @Lob
 	private String text;
 
 	public long getLessonId() {
-		return lessonId;
+		return id;
 	}
 
 	public void setLessonId(long lessonId) {
-		this.lessonId = lessonId;
+		this.id = lessonId;
 	}
 
-	public long getClassId() {
-		return classId;
-	}
+	public Classroom getClassroom() {
+        return classroom;
+    }
 
-	public void setClassId(long classId) {
-		this.classId = classId;
-	}
+    public void setClassroom(Classroom classroom) {
+        this.classroom = classroom;
+    }
 
-	public String getTitle() {
+    public String getTitle() {
 		return title;
 	}
 
@@ -55,7 +69,7 @@ public class Lesson {
 	@Override
 	public String toString() {
 		return String.format("Lesson[lesson_id=%d, class_id=%d, title=%s,text='%s']", 
-				lessonId, classId, title, text);
+				id, classroom.getClassroomId(), title, text);
 	}
 	
 }

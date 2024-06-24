@@ -1,22 +1,50 @@
 package com.projects.classroom.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 
+@Entity
 public class Assignment {
 
-    @PositiveOrZero(message = "assignmentId cannot be less than 0")
-	private long assignmentId;
+    @Id
+    @Column(name = "assignment_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @PositiveOrZero
+	private long id;
     
-    @PositiveOrZero(message = "classId cannot be less than 0")
-	private long classId;
-	
-	@NotNull(message = "title cannot be null")
-	@NotBlank(message = "title cannot be blank")
+    @ManyToOne
+    @JoinColumn(name = "class_id")
+	private Classroom classroom;
+    
+    @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL)
+    private List<Submission> submissions;
+    
+	@NotNull
+	@NotBlank
 	private String title;
 	
+	@Lob
 	private String description;
+	
+	public Assignment() {
+	    submissions = new ArrayList<>();
+	}
 
 	public String getTitle() {
 		return title;
@@ -27,22 +55,22 @@ public class Assignment {
 	}
 
 	public long getAssignmentId() {
-		return assignmentId;
+		return id;
 	}
 
 	public void setAssignmentId(long assignmentId) {
-		this.assignmentId = assignmentId;
+		this.id = assignmentId;
 	}
 
-	public long getClassId() {
-		return classId;
-	}
+	public Classroom getClassroom() {
+        return classroom;
+    }
 
-	public void setClassId(long classId) {
-		this.classId = classId;
-	}
+    public void setClassroom(Classroom classroom) {
+        this.classroom = classroom;
+    }
 
-	public String getDescription() {
+    public String getDescription() {
 		return description;
 	}
 
@@ -53,7 +81,7 @@ public class Assignment {
 	@Override
 	public String toString() {
 		return String.format("Assignment[assignment_id=%d, class_id=%d, title='%s', description='%s']", 
-				assignmentId, classId, title,description);
+				id, classroom.getClassroomId(), title,description);
 	}
 	
 }

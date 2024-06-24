@@ -19,7 +19,7 @@
 	</div>
 		<div class="row mt-3 ml-4">
     <div id="listOfButtons" th:each="classroomButton : ${classroomButtons}">
-     <a th:href="@{/select-class-{classroomId}(classroomId=${classroomButton.getClassroom().getClassId()})}"
+     <a th:href="@{/select-class-{classroomId}(classroomId=${classroomButton.getClassroom().getClassroomId()})}"
         type="button"
         class="btn btn-outline-secondary mb-4 mr-3 search-btn"
         th:text="${#strings.capitalizeWords(classroomButton.toString()) }"

@@ -2,6 +2,7 @@ package com.projects.classroom.controller;
 
 import java.util.List;
 
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -21,25 +22,16 @@ import com.projects.classroom.model.UserOption;
 import com.projects.classroom.model.UserType;
 import com.projects.classroom.service.StudentService;
 import com.projects.classroom.service.TeacherService;
-import com.projects.classroom.service.UserRegistrationService;
 import com.projects.classroom.service.UserService;
 
 @Controller
 public class SignUpController {
-
-    @Autowired
-    private UserService userService;
  
     @Autowired
     private StudentService studentService;
     
     @Autowired
     private TeacherService teacherService;
-    
-    @Autowired 
-    private UserRegistrationService userRegistrationService;
-    
-    private static final Logger logger = LoggerFactory.getLogger(SignUpController.class);
     
     @GetMapping("/signup")
     public String attemptSignup(Model model) {
@@ -59,15 +51,7 @@ public class SignUpController {
     public String attemptSignUp(@ModelAttribute("user") User user,
             @ModelAttribute("student") Student student, @ModelAttribute("teacher") Teacher teacher,
             @ModelAttribute("userOption") UserOption userOption, RedirectAttributes attributes, HttpServletRequest request) {
-        
-        List<String> validationMessages = userRegistrationService.validateUser(user);
-        
-        if(!validationMessages.isEmpty()) {
-            attributes.addFlashAttribute("validationMessages",validationMessages);
-            return "redirect:/signup";
-        }
-        
-        userService.encryptUserPassword(user);
+       
         request.getSession().invalidate();
         
         if(userOption.getUserType() == UserType.STUDENT) {
@@ -75,7 +59,7 @@ public class SignUpController {
             studentService.save(student);
             student = studentService.getStudentByUsername(student.getUsername());
             attributes.addFlashAttribute("student",student);
-            request.getSession().setAttribute("STUDENT", student);
+            request.getSession().setAttribute("STUDENT_ID", student.getUserId());
             return "redirect:/home";
         }
         else if(userOption.getUserType() == UserType.TEACHER){
@@ -83,7 +67,7 @@ public class SignUpController {
             teacherService.save(teacher);
             teacher= teacherService.getTeacherByUsername(teacher.getUsername());
             attributes.addFlashAttribute("teacher",teacher);
-            request.getSession().setAttribute("TEACHER", teacher);
+            request.getSession().setAttribute("TEACHER_ID", teacher.getUserId());
             return "redirect:/home";
         }
     

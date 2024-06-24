@@ -1,15 +1,12 @@
 package com.projects.classroom.controller;
 
 import static com.projects.classroom.utilities.Utilities.checkSessionForClassroom;
-import static com.projects.classroom.utilities.Utilities.checkSessionForTeacher;
-import static com.projects.classroom.utilities.Utilities.getClassroomFromSession;
 
-import java.io.InvalidObjectException;
+import static com.projects.classroom.utilities.Utilities.checkSessionForTeacher;
+import static com.projects.classroom.utilities.Utilities.getClassroomIdFromSession;
 
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,10 +14,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.projects.classroom.exception.DatabaseOperationException;
 import com.projects.classroom.model.Announcement;
 import com.projects.classroom.model.Classroom;
 import com.projects.classroom.service.AnnouncementService;
+import com.projects.classroom.service.ClassroomService;
 
 @Controller
 public class AnnouncementController {
@@ -28,10 +25,11 @@ public class AnnouncementController {
     @Autowired
     AnnouncementService announcementService;
     
-    private static final Logger logger = LoggerFactory.getLogger(AnnouncementController.class);
+    @Autowired
+    ClassroomService classroomService;
     
     @GetMapping(value="create-announcement")
-    public String createLesson(Model model,
+    public String createAnnouncement(Model model,
             @ModelAttribute(value="title") String title,
             @ModelAttribute(value ="content") String content,
             RedirectAttributes attributes,
@@ -42,19 +40,14 @@ public class AnnouncementController {
         else if(!checkSessionForClassroom(session)) {
             return "redirect:/home";
         }
-        Classroom classroom = getClassroomFromSession(session);
+        Classroom classroom = classroomService.get(getClassroomIdFromSession(session));
         Announcement announcement = new Announcement();
-        announcement.setClassId(classroom.getClassId());
+        announcement.setClassroom(classroom);
         announcement.setTitle(title);
         announcement.setText(content);
-        try {
-            announcementService.save(announcement);
-            return "redirect:/classroom";
-        } catch (InvalidObjectException | DatabaseOperationException e) {
-            logger.error(e.toString());
-            attributes.addFlashAttribute("errorOccured",true);   
-        }
         
-        return "redirect:/write-post-announcement";
+        announcementService.save(announcement);
+        return "redirect:/classroom";
+
     }
 }

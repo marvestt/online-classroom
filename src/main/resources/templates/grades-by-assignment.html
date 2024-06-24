@@ -27,9 +27,9 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="grade : ${listOfGrades}">
-							<td scope="row" th:text="${studentIdToStudent.get(grade.getStudentId()).getFirstName() + ' ' + studentIdToStudent.get(grade.getStudentId()).getSurname()}"> </td>
-							<td th:text="${grade.getGrade()}"> </td>
+						<tr th:each="submission : ${listOfSubmissions}">
+							<td scope="row" th:text="${submission.getStudent().getFirstName() + ' ' + submission.getStudent().getSurname()}"> </td>
+							<td th:text="${submission.getGrade()}"> </td>
 						</tr>
 					</tbody>
 				</table>
