@@ -57,13 +57,13 @@ public class UserService {
         userRepo.deleteById(userId);
     }
     
-    public void registerUser(@Valid User user) {
+    public User registerUser(@Valid User user) {
         boolean userExists = checkUserExists(user.getUsername());
         if(!userExists) {
             String rawPassword = user.getPassword();
             String encodedPassword = passwordEncryptionService.encryptPassword(rawPassword);
             user.setPassword(encodedPassword);
-            userRepo.save(user);
+            return userRepo.save(user);
         }
         else {
             throw new UserAlreadyExistsException(user.getUsername());    

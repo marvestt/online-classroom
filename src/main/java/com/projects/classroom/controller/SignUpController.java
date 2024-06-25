@@ -72,7 +72,7 @@ public class SignUpController {
         
         request.getSession().invalidate();
         try {
-            userService.registerUser(user);
+            user = userService.registerUser(user);
             if(userOption.getUserType() == UserType.STUDENT) {
                 student.setUserInfo(user);
                 student = studentService.save(student);
