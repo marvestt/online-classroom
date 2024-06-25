@@ -65,7 +65,10 @@ public class UserService {
             user.setPassword(encodedPassword);
             userRepo.save(user);
         }
-        throw new UserAlreadyExistsException(user.getUsername());
+        else {
+            throw new UserAlreadyExistsException(user.getUsername());    
+        }
+        
     }
     
     public User save(@Valid User user) {
